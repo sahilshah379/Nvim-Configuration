@@ -12,6 +12,8 @@ Plug ('nvim-lua/plenary.nvim')
 Plug ('nvim-telescope/telescope.nvim', { branch = '0.1.x' })
 Plug ('akinsho/toggleterm.nvim', {tag = '*'})
 Plug ('neoclide/coc.nvim', {branch = 'release'})
+Plug ('rmagatti/auto-session')
+Plug ('ggandor/leap.nvim')
 
 vim.call('plug#end')
 
@@ -42,3 +44,7 @@ require('toggleterm').setup({
     open_mapping = '`',
     direction = 'float',
 })
+
+require("auto-session").setup()
+
+require('leap').create_default_mappings()

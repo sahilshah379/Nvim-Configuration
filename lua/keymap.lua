@@ -2,8 +2,9 @@
 
 -- [[ Local Variables ]]
 local map = vim.api.nvim_set_keymap
-local telescope_builtin = require('telescope.builtin')
-local tree_api = require('nvim-tree.api')
+local telescope_require = require('telescope.builtin')
+local tree_require = require('nvim-tree.api')
+local leap_require = require('leap')
 
 -- [[ Clipboard ]]
 map('n', '<leader>y', '"+y', {})
@@ -18,13 +19,13 @@ map('v', '<M-Up>', ':m \'<-2<CR>gv=gv', {})
 map('v', '<M-Down>', ':m \'>+1<CR>gv=gv', {})
 
 -- [[ Tree ]]
-vim.keymap.set('n', '<leader>e', tree_api.tree.toggle, {})
+vim.keymap.set('n', '<leader>e', tree_require.tree.toggle, {})
 
 -- [[ Telescope ]]
-vim.keymap.set('n', '<leader>f', telescope_builtin.find_files, {})
-vim.keymap.set('n', '<leader>g', telescope_builtin.live_grep, {})
-vim.keymap.set('n', '<leader>b', telescope_builtin.buffers, {})
-vim.keymap.set('n', '<leader>h', telescope_builtin.help_tags, {})
+vim.keymap.set('n', '<leader>f', telescope_require.find_files, {})
+vim.keymap.set('n', '<leader>g', telescope_require.live_grep, {})
+vim.keymap.set('n', '<leader>b', telescope_require.buffers, {})
+vim.keymap.set('n', '<leader>h', telescope_require.help_tags, {})
 
 -- [[ Coc ]]
 vim.opt.updatetime = 300
@@ -48,3 +49,12 @@ function _G.show_docs()
     end
 end
 vim.keymap.set('n', 'K', '<CMD>lua _G.show_docs()<CR>', {silent = true})
+
+-- [[ Leap ]]
+vim.keymap.set('n', 's', function ()
+  local focusable_windows = vim.tbl_filter(
+    function (win) return vim.api.nvim_win_get_config(win).focusable end,
+    vim.api.nvim_tabpage_list_wins(0)
+  )
+  leap_require.leap { target_windows = focusable_windows }
+end)
