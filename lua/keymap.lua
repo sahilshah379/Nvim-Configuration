@@ -23,7 +23,7 @@ vim.keymap.set('n', '<leader>q', ':qa<CR>', {})
 vim.keymap.set('n', '<leader>e', ':e!<CR>', {})
 
 -- [[ Tree ]]
-vim.keymap.set('n', '<leader>e', tree_require.tree.toggle, {})
+vim.keymap.set('n', '<leader>t', tree_require.tree.toggle, {})
 
 -- [[ Telescope ]]
 vim.keymap.set('n', '<leader>f', telescope_require.find_files, {})
