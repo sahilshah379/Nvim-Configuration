@@ -20,6 +20,7 @@ vim.keymap.set('v', '<M-Down>', ':m \'>+1<CR>gv=gv', {})
 -- [[ Window Commands ]]
 vim.keymap.set('n', '<leader>w', ':wa<CR>', {})
 vim.keymap.set('n', '<leader>q', ':qa<CR>', {})
+vim.keymap.set('n', '<leader>e', ':e!<CR>', {})
 
 -- [[ Tree ]]
 vim.keymap.set('n', '<leader>e', tree_require.tree.toggle, {})
