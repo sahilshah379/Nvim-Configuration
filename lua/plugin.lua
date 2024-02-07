@@ -4,7 +4,6 @@ local Plug = vim.fn['plug#']
 
 vim.call('plug#begin', '~/.config/nvim/plugged')
 
--- Plug 'github/copilot.vim'
 Plug ('numToStr/Comment.nvim')
 Plug ('nvim-tree/nvim-web-devicons')
 Plug ('nvim-tree/nvim-tree.lua')
@@ -14,6 +13,7 @@ Plug ('akinsho/toggleterm.nvim', {tag = '*'})
 Plug ('neoclide/coc.nvim', {branch = 'release'})
 Plug ('rmagatti/auto-session')
 Plug ('ggandor/leap.nvim')
+Plug ('github/copilot.vim')
 
 vim.call('plug#end')
 

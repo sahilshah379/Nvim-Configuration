@@ -1,22 +1,25 @@
 -- [[ keymap.lua ]]
 
 -- [[ Local Variables ]]
-local map = vim.api.nvim_set_keymap
 local telescope_require = require('telescope.builtin')
 local tree_require = require('nvim-tree.api')
 local leap_require = require('leap')
 
 -- [[ Clipboard ]]
-map('n', '<leader>y', '"+y', {})
-map('v', '<leader>y', '"+y', {})
-map('n', '<leader>p', '"+p', {})
-map('n', '<leader>P', '"+P', {})
+vim.keymap.set('n', '<leader>y', '"+y', {})
+vim.keymap.set('v', '<leader>y', '"+y', {})
+vim.keymap.set('n', '<leader>p', '"+p', {})
+vim.keymap.set('n', '<leader>P', '"+P', {})
 
 -- [[ VS Code Keybindings ]]
-map('n', '<M-Up>', ':m .-2<CR>==', {})
-map('n', '<M-Down>', ':m .+1<CR>==', {})
-map('v', '<M-Up>', ':m \'<-2<CR>gv=gv', {})
-map('v', '<M-Down>', ':m \'>+1<CR>gv=gv', {})
+vim.keymap.set('n', '<M-Up>', ':m .-2<CR>==', {})
+vim.keymap.set('n', '<M-Down>', ':m .+1<CR>==', {})
+vim.keymap.set('v', '<M-Up>', ':m \'<-2<CR>gv=gv', {})
+vim.keymap.set('v', '<M-Down>', ':m \'>+1<CR>gv=gv', {})
+
+-- [[ Window Commands ]]
+vim.keymap.set('n', '<leader>w', ':wa<CR>', {})
+vim.keymap.set('n', '<leader>q', ':qa<CR>', {})
 
 -- [[ Tree ]]
 vim.keymap.set('n', '<leader>e', tree_require.tree.toggle, {})
