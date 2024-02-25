@@ -21,11 +21,19 @@ Plug ('ggandor/leap.nvim')
 vim.call('plug#end')
 
 
-require('lualine').setup({
-    options = {
-        theme = 'sonokai'
-    }
-})
+require('lualine').setup {
+  options = {
+    theme = 'sonokai',
+  },
+  sections = {
+    lualine_a = {'mode'},
+    lualine_b = {'branch', 'diff'},
+    lualine_c = {'filename'},
+    lualine_x = {'encoding', 'fileformat', 'filetype'},
+    lualine_y = {'progress'},
+    lualine_z = {'location'}
+  },
+}
 
 require('nvim-tree').setup()
 
