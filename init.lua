@@ -4,6 +4,6 @@
 vim.g.mapleader = ' '
 
 -- [[ Imports ]]
-require('option')
 require('plugin')
+require('option')
 require('keymap')

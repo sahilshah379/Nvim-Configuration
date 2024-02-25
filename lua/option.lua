@@ -38,8 +38,10 @@ opt.encoding = 'utf8'
 opt.fileencoding = 'utf8'
 
 -- [[ Theme ]]
-opt.syntax = 'ON'
 opt.termguicolors = true
+g.sonokai_style = 'atlantis'
+g.sonokai_better_performance = 1
+cmd.colorscheme 'sonokai'
 
 -- [[ Search ]]
 opt.ignorecase = true
