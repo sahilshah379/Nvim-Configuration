@@ -4,19 +4,18 @@ local Plug = vim.fn['plug#']
 
 vim.call('plug#begin', '~/.config/nvim/plugged')
 
-Plug ('sainnhe/sonokai')
-Plug ('nvim-lualine/lualine.nvim')
-Plug ('nvim-tree/nvim-web-devicons')
-Plug ('nvim-tree/nvim-tree.lua')
-Plug ('nvim-treesitter/nvim-treesitter', {['do'] = 'TSUpdate'})
-Plug ('nvim-lua/plenary.nvim')
-Plug ('rmagatti/auto-session')
-Plug ('numToStr/Comment.nvim')
-Plug ('nvim-telescope/telescope.nvim', { branch = '0.1.x' })
-Plug ('akinsho/toggleterm.nvim', {tag = '*'})
-Plug ('neoclide/coc.nvim', {branch = 'release'})
-Plug ('ggandor/leap.nvim')
--- Plug ('github/copilot.vim')
+Plug ('sainnhe/sonokai') -- theme
+Plug ('nvim-lualine/lualine.nvim') -- statusline
+Plug ('nvim-tree/nvim-web-devicons') -- icons
+Plug ('nvim-tree/nvim-tree.lua') -- file explorer
+Plug ('nvim-lua/plenary.nvim') -- dependency for telescope
+Plug ('nvim-telescope/telescope.nvim', { branch = '0.1.x' }) -- fuzzy finder
+Plug ('akinsho/toggleterm.nvim', {tag = '*'}) -- terminal
+Plug ('nvim-treesitter/nvim-treesitter', {['do'] = 'TSUpdate'}) -- highlighting
+Plug ('numToStr/Comment.nvim') -- toggle comment
+Plug ('ggandor/leap.nvim') -- jump to phrase
+Plug ('neoclide/coc.nvim', {branch = 'release'}) -- code auto complete
+Plug ('rmagatti/auto-session') -- session manager (~/.local/share/nvim/sessions)
 
 vim.call('plug#end')
 

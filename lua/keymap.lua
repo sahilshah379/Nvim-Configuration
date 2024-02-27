@@ -12,10 +12,10 @@ vim.keymap.set('n', '<leader>p', '"+p', {})
 vim.keymap.set('n', '<leader>P', '"+P', {})
 
 -- [[ VS Code Keybindings ]]
-vim.keymap.set('n', '<M-Up>', ':m .-2<CR>==', {})
-vim.keymap.set('n', '<M-Down>', ':m .+1<CR>==', {})
-vim.keymap.set('v', '<M-Up>', ':m \'<-2<CR>gv=gv', {})
-vim.keymap.set('v', '<M-Down>', ':m \'>+1<CR>gv=gv', {})
+vim.keymap.set('n', '<M-k>', ':m .-2<CR>==', {})
+vim.keymap.set('n', '<M-j>', ':m .+1<CR>==', {})
+vim.keymap.set('v', '<M-k>', ':m \'<-2<CR>gv=gv', {})
+vim.keymap.set('v', '<M-j>', ':m \'>+1<CR>gv=gv', {})
 
 -- [[ Window Commands ]]
 vim.keymap.set('n', '<leader>w', ':wa<CR>', {})
