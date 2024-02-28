@@ -10,6 +10,7 @@ Plug ('nvim-tree/nvim-web-devicons') -- icons
 Plug ('nvim-tree/nvim-tree.lua') -- file explorer
 Plug ('nvim-lua/plenary.nvim') -- dependency for telescope
 Plug ('nvim-telescope/telescope.nvim', { branch = '0.1.x' }) -- fuzzy finder
+Plug ('nvim-telescope/telescope-live-grep-args.nvim') -- grep config
 Plug ('akinsho/toggleterm.nvim', {tag = '*'}) -- terminal
 Plug ('nvim-treesitter/nvim-treesitter', {['do'] = 'TSUpdate'}) -- highlighting
 Plug ('numToStr/Comment.nvim') -- toggle comment
@@ -30,7 +31,7 @@ require('lualine').setup {
     lualine_c = {'filename'},
     lualine_x = {'encoding', 'fileformat', 'filetype'},
     lualine_y = {'progress'},
-    lualine_z = {'location'}
+    lualine_z = {'location'},
   },
 }
 
@@ -39,10 +40,34 @@ require('nvim-tree').setup()
 require('nvim-treesitter.configs').setup({
     highlight = {
         enable = true,
-    }
+    },
 })
 
-require('auto-session').setup()
+require('telescope').load_extension('live_grep_args')
+require('telescope').setup({
+    defaults = {
+        file_ignore_patterns = {
+            "__pycache__/",
+            ".git/",
+            ".venv/"
+        },
+    },
+    pickers = {
+        find_files = {
+            find_command = { 'rg', '--files', '--hidden'},
+        },
+    },
+    extensions = {
+        live_grep_args = {
+            auto_quoting = true,
+        },
+    },
+})
+
+require('toggleterm').setup({
+    open_mapping = '`',
+    direction = 'float',
+})
 
 require('Comment').setup({
     toggler = {
@@ -64,9 +89,6 @@ require('Comment').setup({
     end,
 })
 
-require('toggleterm').setup({
-    open_mapping = '`',
-    direction = 'float',
-})
-
 require('leap').create_default_mappings()
+
+require('auto-session').setup()

@@ -27,7 +27,7 @@ vim.keymap.set('n', '<leader>t', tree_require.tree.toggle, {})
 
 -- [[ Telescope ]]
 vim.keymap.set('n', '<leader>f', telescope_require.find_files, {})
-vim.keymap.set('n', '<leader>g', telescope_require.live_grep, {})
+vim.keymap.set('n', '<leader>g', ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>")
 vim.keymap.set('n', '<leader>b', telescope_require.buffers, {})
 vim.keymap.set('n', '<leader>h', telescope_require.help_tags, {})
 
