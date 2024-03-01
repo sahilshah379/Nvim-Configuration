@@ -1,16 +1,13 @@
 -- [[ options.lua ]]
 
--- [[ Local Variables ]]
-local opt = vim.opt
-local g = vim.g
-local cmd = vim.cmd
-
 -- [[ Context ]]
-g.loaded_netrw = 1
-g.loaded_netrwPlugin = 1
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+vim.opt.updatetime = 300
+vim.opt.mouse = nil
 
 -- [[ Clipboard ]]
-g.clipboard = {
+vim.g.clipboard = {
     name = 'WslClipboard',
     copy = {
         ['+'] = 'clip.exe',
@@ -24,38 +21,36 @@ g.clipboard = {
 }
 
 -- [[ Screen ]]
-opt.colorcolumn = '80'
-cmd('highlight ColorColumn ctermbg=lightgrey guibg=lightgrey')
-opt.number = true
-opt.relativenumber = true
-opt.scrolloff = 2
-opt.wrap = true
-opt.signcolumn = 'no'
-opt.updatetime = 300
-opt.mouse = nil
+vim.opt.colorcolumn = '80'
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.scrolloff = 2
+vim.opt.wrap = true
+vim.opt.signcolumn = 'no'
+vim.cmd('highlight ColorColumn ctermbg=lightgrey guibg=lightgrey')
 
 -- [[ Filetypes ]]
-opt.encoding = 'utf8'
-opt.fileencoding = 'utf8'
+vim.opt.encoding = 'utf8'
+vim.opt.fileencoding = 'utf8'
 
 -- [[ Theme ]]
-opt.termguicolors = true
-g.sonokai_style = 'atlantis'
-g.sonokai_better_performance = 1
-cmd.colorscheme 'sonokai'
+vim.opt.termguicolors = true
+vim.g.sonokai_style = 'atlantis'
+vim.g.sonokai_better_performance = 1
+vim.cmd.colorscheme 'sonokai'
 
 -- [[ Search ]]
-opt.ignorecase = true
-opt.smartcase = true
-opt.incsearch = true
-opt.hlsearch = false
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+vim.opt.incsearch = true
+vim.opt.hlsearch = false
 
 -- [[ Whitespace ]]
-opt.expandtab = true
-opt.shiftwidth = 4
-opt.softtabstop = 4
-opt.tabstop = 4
+vim.opt.expandtab = true
+vim.opt.shiftwidth = 4
+vim.opt.softtabstop = 4
+vim.opt.tabstop = 4
 
 -- [[ Splits ]]
-opt.splitbelow = true
-opt.splitright = true
+vim.opt.splitbelow = true
+vim.opt.splitright = true
