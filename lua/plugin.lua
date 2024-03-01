@@ -4,7 +4,7 @@ local Plug = vim.fn['plug#']
 
 vim.call('plug#begin', '~/.config/nvim/plugged')
 
-Plug('sainnhe/sonokai')                                          -- theme
+Plug('catppuccin/nvim')                                          -- theme
 Plug('nvim-lualine/lualine.nvim')                                -- statusline
 Plug('nvim-tree/nvim-web-devicons')                              -- icons
 Plug('nvim-tree/nvim-tree.lua')                                  -- file explorer
@@ -21,9 +21,9 @@ Plug('rmagatti/auto-session')                                    -- session mana
 vim.call('plug#end')
 
 
-require('lualine').setup {
+require('lualine').setup({
     options = {
-        theme = 'sonokai',
+        theme = 'catppuccin',
     },
     sections = {
         lualine_a = { 'mode' },
@@ -33,7 +33,7 @@ require('lualine').setup {
         lualine_y = { 'progress' },
         lualine_z = { 'location' },
     },
-}
+})
 
 require('nvim-tree').setup()
 
