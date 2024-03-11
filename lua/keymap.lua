@@ -11,6 +11,10 @@ local expression_opts = { expr = true, noremap = true, replace_keycodes = true, 
 vim.keymap.set('n', '<ESC>', ':nohlsearch<Bar>:echo<CR>', default_opts)
 vim.keymap.set('n', 'n', 'nzz', default_opts)
 vim.keymap.set('n', 'N', 'Nzz', default_opts)
+vim.keymap.set('n', '<C-u>', '<C-u>zz', default_opts)
+vim.keymap.set('n', '<C-d>', '<C-d>zz', default_opts)
+vim.keymap.set('n', '<C-f>', '<C-f>zz', default_opts)
+vim.keymap.set('n', '<C-b>', '<C-b>zz', default_opts)
 
 -- [[ Text Manipulation ]]
 vim.keymap.set('n', '<M-k>', ':m .-2<CR>==', default_opts)
@@ -29,14 +33,14 @@ vim.keymap.set('v', '<leader>p', '"+p', default_opts)
 vim.keymap.set('v', '<leader>P', '"+P', default_opts)
 
 -- [[ Windows ]]
-vim.keymap.set('n', '<C-h>', '<C-w>h', default_opts)
-vim.keymap.set('n', '<C-j>', '<C-w>j', default_opts)
-vim.keymap.set('n', '<C-k>', '<C-w>k', default_opts)
-vim.keymap.set('n', '<C-l>', '<C-w>l', default_opts)
-vim.keymap.set('n', '<C-Up>', ':resize +2<CR>', default_opts)
-vim.keymap.set('n', '<C-Down>', ':resize -2<CR>', default_opts)
-vim.keymap.set('n', '<C-Left>', ':vertical resize -2<CR>', default_opts)
-vim.keymap.set('n', '<C-Right>', ':vertical resize +2<CR>', default_opts)
+vim.keymap.set('n', '<C-h>', '<cmd><C-U>TmuxNavigateLeft<CR>', default_opts)
+vim.keymap.set('n', '<C-j>', '<cmd><C-U>TmuxNavigateDown<CR>', default_opts)
+vim.keymap.set('n', '<C-k>', '<cmd><C-U>TmuxNavigateUp<CR>', default_opts)
+vim.keymap.set('n', '<C-l>', '<cmd><C-U>TmuxNavigateRight<CR>', default_opts)
+vim.keymap.set('n', '<M-Up>', ':resize +2<CR>', default_opts)
+vim.keymap.set('n', '<M-Down>', ':resize -2<CR>', default_opts)
+vim.keymap.set('n', '<M-Left>', ':vertical resize -2<CR>', default_opts)
+vim.keymap.set('n', '<M-Right>', ':vertical resize +2<CR>', default_opts)
 
 -- [[ Context Commands ]]
 vim.keymap.set('n', '<leader>w', ':wa<CR>', {})

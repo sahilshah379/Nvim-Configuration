@@ -17,6 +17,7 @@ Plug('numToStr/Comment.nvim')                                    -- toggle comme
 Plug('ggandor/leap.nvim')                                        -- jump to phrase
 Plug('neoclide/coc.nvim', { branch = 'release' })                -- code auto complete
 Plug('rmagatti/auto-session')                                    -- session manager (~/.local/share/nvim/sessions)
+Plug('christoomey/vim-tmux-navigator')                           -- tmux
 
 vim.call('plug#end')
 
