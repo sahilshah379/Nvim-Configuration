@@ -11,7 +11,6 @@ Plug('nvim-tree/nvim-tree.lua')                                  -- file explore
 Plug('nvim-lua/plenary.nvim')                                    -- dependency for telescope
 Plug('nvim-telescope/telescope.nvim', { branch = '0.1.x' })      -- fuzzy finder
 Plug('nvim-telescope/telescope-live-grep-args.nvim')             -- grep config
-Plug('akinsho/toggleterm.nvim', { tag = '*' })                   -- terminal
 Plug('nvim-treesitter/nvim-treesitter', { ['do'] = 'TSUpdate' }) -- highlighting
 Plug('numToStr/Comment.nvim')                                    -- toggle comment
 Plug('ggandor/leap.nvim')                                        -- jump to phrase
@@ -63,11 +62,6 @@ require('telescope').setup({
             auto_quoting = true,
         },
     },
-})
-
-require('toggleterm').setup({
-    open_mapping = '`',
-    direction = 'float',
 })
 
 require('Comment').setup({
