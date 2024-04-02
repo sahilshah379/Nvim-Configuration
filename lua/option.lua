@@ -3,6 +3,7 @@
 -- [[ Context ]]
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+vim.g.loaded_perl_provider = 0
 vim.opt.updatetime = 300
 vim.opt.swapfile = false
 vim.opt.mouse = nil
@@ -53,3 +54,4 @@ vim.opt.tabstop = 4
 -- [[ Splits ]]
 vim.opt.splitbelow = true
 vim.opt.splitright = true
+
