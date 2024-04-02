@@ -2,11 +2,13 @@
 
 -- [[ Local Variables ]]
 local telescope_require = require('telescope.builtin')
-local tree_require = require('nvim-tree.api')
 local leap_require = require('leap')
 local harpoon_require = require('harpoon')
+local lsp_require = require('lsp-zero')
+local cmp_require = require('cmp')
 local default_opts = { noremap = true, silent = true }
 local expression_opts = { expr = true, noremap = true, replace_keycodes = true, silent = true }
+local lsp_opts = { buffer = bufnr, remap = false }
 
 -- [[ General ]]
 vim.keymap.set('n', '<ESC>', ':nohlsearch<Bar>:echo<CR>', default_opts)
@@ -26,6 +28,7 @@ vim.keymap.set('n', '<M-j>', ':m .+1<CR>==', default_opts)
 vim.keymap.set('v', '<M-j>', ':m \'>+1<CR>gv=gv', default_opts)
 vim.keymap.set('v', '<', '<gv', default_opts)
 vim.keymap.set('v', '>', '>gv', default_opts)
+vim.keymap.set('i', '<S-Tab>', '<C-d>', default_opts)
 
 -- [[ Clipboard ]]
 vim.keymap.set('n', '<leader>y', '"+y', default_opts)
@@ -46,17 +49,23 @@ vim.keymap.set('n', '<M-Left>', ':vertical resize -2<CR>', default_opts)
 vim.keymap.set('n', '<M-Right>', ':vertical resize +2<CR>', default_opts)
 
 -- [[ Context Commands ]]
-vim.keymap.set('n', '<leader>w', ':wa<CR>', {})
+vim.keymap.set('n', '<leader>w', ':lua vim.lsp.buf.format()<CR>:wa<CR>', {})
 vim.keymap.set('n', '<leader>q', ':qa<CR>', {})
 vim.keymap.set('n', '<leader>e', ':e!<CR>', {})
-
--- [[ Tree ]]
-vim.keymap.set('n', '<leader>t', tree_require.tree.toggle, {})
 
 -- [[ Telescope ]]
 vim.keymap.set('n', '<leader>f', telescope_require.find_files, {})
 vim.keymap.set('n', '<leader>g', ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>")
 vim.keymap.set('n', '<leader>h', telescope_require.help_tags, {})
+
+-- [[ Leap ]]
+vim.keymap.set('n', 's', function()
+    local focusable_windows = vim.tbl_filter(
+        function(win) return vim.api.nvim_win_get_config(win).focusable end,
+        vim.api.nvim_tabpage_list_wins(0)
+    )
+    leap_require.leap { target_windows = focusable_windows }
+end)
 
 -- [[ Harpoon ]]
 vim.keymap.set('n', '<leader>a', function() harpoon_require:list():append() end)
@@ -68,48 +77,19 @@ vim.keymap.set('n', '<leader>4', function() harpoon_require:list():select(4) end
 vim.keymap.set('n', '<C-n>', function() harpoon_require:list():prev() end)
 vim.keymap.set('n', '<C-m>', function() harpoon_require:list():next() end)
 
--- [[ Coc ]]
--- function _G.check_back_space()
---     local col = vim.fn.col('.') - 1
---     return col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') ~= nil
--- end
---
--- function _G.show_docs()
---     local cw = vim.fn.expand('<cword>')
---     if vim.fn.index({ 'vim', 'help' }, vim.bo.filetype) >= 0 then
---         vim.api.nvim_command('h ' .. cw)
---     elseif vim.api.nvim_eval('coc#rpc#ready()') then
---         vim.fn.CocActionAsync('doHover')
---     else
---         vim.api.nvim_command('!' .. vim.o.keywordprg .. ' ' .. cw)
---     end
--- end
---
--- function _G.formatter()
---     vim.fn.CocActionAsync('format', function()
---         vim.api.nvim_command('w')
---     end)
--- end
---
--- vim.keymap.set('i', '<TAB>', 'coc#pum#visible() ? coc#pum#next(1) : v:lua.check_back_space() ? "<TAB>" : coc#refresh()',
---     expression_opts)
--- vim.keymap.set('i', '<S-TAB>', [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"]], expression_opts)
--- vim.keymap.set('i', '<cr>', [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]],
---     expression_opts)
--- vim.keymap.set('n', 'gd', '<Plug>(coc-definition)', default_opts)
--- vim.keymap.set('n', 'gy', '<Plug>(coc-type-definition)', default_opts)
--- vim.keymap.set('n', 'gi', '<Plug>(coc-implementation)', default_opts)
--- vim.keymap.set('n', 'gr', '<Plug>(coc-references)', default_opts)
--- vim.keymap.set('n', '<leader>r', '<Plug>(coc-rename)', default_opts)
--- vim.keymap.set('n', '<leader>z', '<CMD>lua _G.formatter()<CR>', default_opts)
--- vim.keymap.set('n', 'K', '<CMD>lua _G.show_docs()<CR>', default_opts)
+-- [[ LSP ]]
+lsp_require.on_attach(function(client, bufnr)
+    lsp_require.default_keymaps({ buffer = bufnr })
 
-
--- [[ Leap ]]
-vim.keymap.set('n', 's', function()
-    local focusable_windows = vim.tbl_filter(
-        function(win) return vim.api.nvim_win_get_config(win).focusable end,
-        vim.api.nvim_tabpage_list_wins(0)
-    )
-    leap_require.leap { target_windows = focusable_windows }
+    vim.keymap.set('n', 'K', function() vim.lsp.buf.hover() end, opts)
+    vim.keymap.set('n', 'gd', function() vim.lsp.buf.definition() end, opts)
+    vim.keymap.set('n', 'gD', function() vim.lsp.buf.declaration() end, opts)
+    vim.keymap.set('n', 'gr', function() vim.lsp.buf.references() end, opts)
+    vim.keymap.set('n', '<leader>r', function() vim.lsp.buf.rename() end, opts)
 end)
+cmp_require.setup({
+    mapping = cmp_require.mapping.preset.insert({
+        ['<Tab>'] = lsp_require.cmp_action().tab_complete(),
+        ['<S-Tab>'] = lsp_require.cmp_action().select_prev_or_fallback(),
+    }),
+})

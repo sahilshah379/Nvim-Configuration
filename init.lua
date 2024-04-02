@@ -7,4 +7,3 @@ vim.g.mapleader = ' '
 require('plugin')
 require('option')
 require('keymap')
-

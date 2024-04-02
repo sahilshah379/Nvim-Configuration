@@ -31,6 +31,13 @@ vim.opt.wrap = true
 vim.opt.signcolumn = 'no'
 vim.cmd('highlight ColorColumn ctermbg=lightgrey guibg=lightgrey')
 
+-- [[ Diagnostics ]]
+vim.diagnostic.config({
+    virtual_text = false,
+    virtual_lines = false,
+    signs = false,
+})
+
 -- [[ Filetypes ]]
 vim.opt.encoding = 'utf8'
 vim.opt.fileencoding = 'utf8'
@@ -54,4 +61,3 @@ vim.opt.tabstop = 4
 -- [[ Splits ]]
 vim.opt.splitbelow = true
 vim.opt.splitright = true
-

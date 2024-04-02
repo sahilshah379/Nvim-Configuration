@@ -6,18 +6,22 @@ vim.call('plug#begin', '~/.config/nvim/plugged')
 
 Plug('catppuccin/nvim')                                          -- theme
 Plug('nvim-lualine/lualine.nvim')                                -- statusline
-Plug('nvim-tree/nvim-web-devicons')                              -- icons
-Plug('nvim-tree/nvim-tree.lua')                                  -- file explorer
 Plug('nvim-treesitter/nvim-treesitter', { ['do'] = 'TSUpdate' }) -- highlighting
 Plug('nvim-lua/plenary.nvim')                                    -- dependency
 Plug('nvim-telescope/telescope.nvim', { branch = '0.1.x' })      -- fuzzy finder
 Plug('nvim-telescope/telescope-live-grep-args.nvim')             -- grep config
-Plug('ThePrimeagen/harpoon', { branch = 'harpoon2' })            -- marks
 Plug('numToStr/Comment.nvim')                                    -- toggle comment
 Plug('ggandor/leap.nvim')                                        -- jump to phrase
--- Plug('neoclide/coc.nvim', { branch = 'release' })                -- code auto complete
+Plug('ThePrimeagen/harpoon', { branch = 'harpoon2' })            -- marks
 Plug('rmagatti/auto-session')                                    -- session manager
-Plug('christoomey/vim-tmux-navigator')                           -- tmux
+Plug('christoomey/vim-tmux-navigator')                           -- tmux movement
+Plug('neovim/nvim-lspconfig')                                    -- lsp config
+Plug('williamboman/mason.nvim')                                  -- lsp installer
+Plug('williamboman/mason-lspconfig.nvim')                        -- mason & lspconfig
+Plug('hrsh7th/nvim-cmp')                                         -- completion
+Plug('hrsh7th/cmp-nvim-lsp')                                     -- completion lsp
+Plug('hrsh7th/cmp-buffer')                                       -- lsp from buffer
+Plug('VonHeikemen/lsp-zero.nvim', { branch = 'v3.x' })           -- lsp quickstart
 
 vim.call('plug#end')
 
@@ -35,8 +39,6 @@ require('lualine').setup({
         lualine_z = { 'location' },
     },
 })
-
-require('nvim-tree').setup()
 
 require('nvim-treesitter.configs').setup({
     ensure_installed = {
@@ -65,6 +67,8 @@ require('telescope').setup({
                 ['<C-f>'] = require('telescope-live-grep-args.actions').quote_prompt({ postfix = ' --iglob ' }),
                 ['<C-m>'] = require('telescope.actions').move_selection_next,
                 ['<C-n>'] = require('telescope.actions').move_selection_previous,
+                ['<CR>'] = require('telescope.actions').select_default,
+
             }
         },
     },
@@ -79,8 +83,6 @@ require('telescope').setup({
         },
     },
 })
-
-require('harpoon').setup()
 
 require('Comment').setup({
     toggler = {
@@ -104,11 +106,13 @@ require('Comment').setup({
 
 require('leap').create_default_mappings()
 
+require('harpoon').setup()
+
 require('auto-session').setup({
     log_level = 'error',
-    auto_session_root_dir = vim.fn.stdpath('data')..'/sessions/',
+    auto_session_root_dir = vim.fn.stdpath('data') .. '/sessions/',
     post_restore_cmds = {
-        function ()
+        function()
             local windows = vim.api.nvim_list_wins()
             for _, win in ipairs(windows) do
                 local buf = vim.api.nvim_win_get_buf(win)
@@ -119,6 +123,26 @@ require('auto-session').setup({
                 end
             end
         end
-    }
+    },
 })
 
+require('mason').setup()
+require('mason-lspconfig').setup({
+    ensure_installed = {
+        'bashls', 'clangd', 'lua_ls', 'pyright'
+    },
+    handlers = {
+        require('lsp-zero').default_setup,
+    },
+})
+require('cmp').setup({
+    sources = {
+        { name = 'nvim_lsp' },
+        { name = 'buffer' },
+    },
+})
+require('lsp-zero').set_server_config({
+    on_init = function(client)
+        client.server_capabilities.semanticTokensProvider = nil
+    end,
+})
