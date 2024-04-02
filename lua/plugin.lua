@@ -65,10 +65,13 @@ require('telescope').setup({
                 ['<C-h>'] = 'which_key',
                 ['<C-q>'] = require('telescope-live-grep-args.actions').quote_prompt(),
                 ['<C-f>'] = require('telescope-live-grep-args.actions').quote_prompt({ postfix = ' --iglob ' }),
-                ['<C-m>'] = require('telescope.actions').move_selection_next,
-                ['<C-n>'] = require('telescope.actions').move_selection_previous,
-                ['<CR>'] = require('telescope.actions').select_default,
+                ['<C-j>'] = 'move_selection_next',
+                ['<C-k>'] = 'move_selection_previous',
 
+            },
+            n = {
+                ['<C-j>'] = 'move_selection_next',
+                ['<C-k>'] = 'move_selection_previous',
             }
         },
     },
