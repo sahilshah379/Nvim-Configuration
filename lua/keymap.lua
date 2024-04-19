@@ -20,6 +20,8 @@ vim.keymap.set('n', '<C-f>', '<C-f>zz', default_opts)
 vim.keymap.set('n', '<C-b>', '<C-b>zz', default_opts)
 vim.keymap.set('n', 'gg', 'gg0', default_opts)
 vim.keymap.set('n', 'G', 'G$', default_opts)
+vim.keymap.set('v', 'gg', 'gg0', default_opts)
+vim.keymap.set('v', 'G', 'G$', default_opts)
 
 -- [[ Text Manipulation ]]
 vim.keymap.set('n', '<M-k>', ':m .-2<CR>==', default_opts)

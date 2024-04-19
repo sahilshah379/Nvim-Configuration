@@ -27,8 +27,9 @@ vim.opt.colorcolumn = '80'
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.scrolloff = 2
-vim.opt.wrap = true
 vim.opt.signcolumn = 'no'
+vim.opt.wrap = true
+vim.g.tmux_navigator_no_wrap = 1
 vim.cmd('highlight ColorColumn ctermbg=lightgrey guibg=lightgrey')
 
 -- [[ Diagnostics ]]
