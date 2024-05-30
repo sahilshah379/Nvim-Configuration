@@ -7,7 +7,7 @@ local harpoon_require = require('harpoon')
 local lsp_require = require('lsp-zero')
 local cmp_require = require('cmp')
 local default_opts = { noremap = true, silent = true }
-local lsp_opts = { buffer = bufnr, preserve_mapping = false }
+local lsp_opts = { buffer = bufnr }
 
 -- [[ General ]]
 vim.keymap.set('n', '<ESC>', ':nohlsearch<Bar>:echo<CR>', default_opts)
@@ -57,6 +57,7 @@ vim.keymap.set('n', '<leader>e', ':e!<CR>', {})
 -- [[ Telescope ]]
 vim.keymap.set('n', '<leader>f', telescope_require.find_files, {})
 vim.keymap.set('n', '<leader>g', ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>")
+vim.keymap.set('n', '<leader>d', ":lua require('telescope').extensions.file_browser.file_browser()<CR>")
 vim.keymap.set('n', '<leader>h', telescope_require.help_tags, {})
 
 -- [[ Leap ]]

@@ -9,7 +9,8 @@ Plug('nvim-lualine/lualine.nvim')                                -- statusline
 Plug('nvim-treesitter/nvim-treesitter', { ['do'] = 'TSUpdate' }) -- highlighting
 Plug('nvim-lua/plenary.nvim')                                    -- dependency
 Plug('nvim-telescope/telescope.nvim', { ['branch'] = '0.1.x' })  -- fuzzy finder
-Plug('nvim-telescope/telescope-live-grep-args.nvim')             -- grep config
+Plug('nvim-telescope/telescope-live-grep-args.nvim')             -- telescope grep
+Plug('nvim-telescope/telescope-file-browser.nvim')               -- telescope directory
 Plug('numToStr/Comment.nvim')                                    -- toggle comment
 Plug('ggandor/leap.nvim')                                        -- jump to phrase
 Plug('ThePrimeagen/harpoon', { ['branch'] = 'harpoon2' })        -- marks
@@ -53,6 +54,7 @@ require('nvim-treesitter.configs').setup({
 })
 
 require('telescope').load_extension('live_grep_args')
+require('telescope').load_extension('file_browser')
 require('telescope').setup({
     defaults = {
         file_ignore_patterns = {
