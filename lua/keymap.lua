@@ -7,8 +7,7 @@ local harpoon_require = require('harpoon')
 local lsp_require = require('lsp-zero')
 local cmp_require = require('cmp')
 local default_opts = { noremap = true, silent = true }
-local expression_opts = { expr = true, noremap = true, replace_keycodes = true, silent = true }
-local lsp_opts = { buffer = bufnr, remap = false }
+local lsp_opts = { buffer = bufnr, preserve_mapping = false }
 
 -- [[ General ]]
 vim.keymap.set('n', '<ESC>', ':nohlsearch<Bar>:echo<CR>', default_opts)
@@ -88,11 +87,11 @@ vim.keymap.set('n', '<C-m>', function() harpoon_require:list():next() end)
 lsp_require.on_attach(function(client, bufnr)
     lsp_require.default_keymaps({ buffer = bufnr })
 
-    vim.keymap.set('n', 'K', function() vim.lsp.buf.hover() end, opts)
-    vim.keymap.set('n', 'gd', function() vim.lsp.buf.definition() end, opts)
-    vim.keymap.set('n', 'gD', function() vim.lsp.buf.declaration() end, opts)
-    vim.keymap.set('n', 'gr', function() vim.lsp.buf.references() end, opts)
-    vim.keymap.set('n', '<leader>r', function() vim.lsp.buf.rename() end, opts)
+    vim.keymap.set('n', 'K', function() vim.lsp.buf.hover() end, lsp_opts)
+    vim.keymap.set('n', 'gd', function() vim.lsp.buf.definition() end, lsp_opts)
+    vim.keymap.set('n', 'gD', function() vim.lsp.buf.declaration() end, lsp_opts)
+    vim.keymap.set('n', 'gr', function() vim.lsp.buf.references() end, lsp_opts)
+    vim.keymap.set('n', '<leader>r', function() vim.lsp.buf.rename() end, lsp_opts)
 end)
 cmp_require.setup({
     mapping = cmp_require.mapping.preset.insert({
