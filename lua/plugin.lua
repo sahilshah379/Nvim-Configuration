@@ -8,11 +8,11 @@ Plug('catppuccin/nvim')                                          -- theme
 Plug('nvim-lualine/lualine.nvim')                                -- statusline
 Plug('nvim-treesitter/nvim-treesitter', { ['do'] = 'TSUpdate' }) -- highlighting
 Plug('nvim-lua/plenary.nvim')                                    -- dependency
-Plug('nvim-telescope/telescope.nvim', { branch = '0.1.x' })      -- fuzzy finder
+Plug('nvim-telescope/telescope.nvim', { ['branch'] = '0.1.x' })      -- fuzzy finder
 Plug('nvim-telescope/telescope-live-grep-args.nvim')             -- grep config
 Plug('numToStr/Comment.nvim')                                    -- toggle comment
 Plug('ggandor/leap.nvim')                                        -- jump to phrase
-Plug('ThePrimeagen/harpoon', { branch = 'harpoon2' })            -- marks
+Plug('ThePrimeagen/harpoon', { ['branch'] = 'harpoon2' })            -- marks
 Plug('rmagatti/auto-session')                                    -- session manager
 Plug('christoomey/vim-tmux-navigator')                           -- tmux movement
 Plug('neovim/nvim-lspconfig')                                    -- lsp config
@@ -21,7 +21,7 @@ Plug('williamboman/mason-lspconfig.nvim')                        -- mason & lspc
 Plug('hrsh7th/nvim-cmp')                                         -- completion
 Plug('hrsh7th/cmp-nvim-lsp')                                     -- completion lsp
 Plug('hrsh7th/cmp-buffer')                                       -- lsp from buffer
-Plug('VonHeikemen/lsp-zero.nvim', { branch = 'v3.x' })           -- lsp quickstart
+Plug('VonHeikemen/lsp-zero.nvim', { ['branch'] = 'v3.x' })           -- lsp quickstart
 
 vim.call('plug#end')
 

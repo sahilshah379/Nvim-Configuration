@@ -76,6 +76,11 @@ vim.keymap.set('n', '<leader>1', function() harpoon_require:list():select(1) end
 vim.keymap.set('n', '<leader>2', function() harpoon_require:list():select(2) end)
 vim.keymap.set('n', '<leader>3', function() harpoon_require:list():select(3) end)
 vim.keymap.set('n', '<leader>4', function() harpoon_require:list():select(4) end)
+vim.keymap.set('n', '<leader>5', function() harpoon_require:list():select(5) end)
+vim.keymap.set('n', '<leader>6', function() harpoon_require:list():select(6) end)
+vim.keymap.set('n', '<leader>7', function() harpoon_require:list():select(7) end)
+vim.keymap.set('n', '<leader>8', function() harpoon_require:list():select(8) end)
+vim.keymap.set('n', '<leader>9', function() harpoon_require:list():select(9) end)
 vim.keymap.set('n', '<C-n>', function() harpoon_require:list():prev() end)
 vim.keymap.set('n', '<C-m>', function() harpoon_require:list():next() end)
 
