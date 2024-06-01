@@ -86,8 +86,6 @@ vim.keymap.set('n', '<C-m>', function() harpoon_require:list():next() end)
 
 -- [[ LSP ]]
 lsp_require.on_attach(function(client, bufnr)
-    lsp_require.default_keymaps({ buffer = bufnr })
-
     vim.keymap.set('n', 'K', function() vim.lsp.buf.hover() end, lsp_opts)
     vim.keymap.set('n', 'gd', function() vim.lsp.buf.definition() end, lsp_opts)
     vim.keymap.set('n', 'gD', function() vim.lsp.buf.declaration() end, lsp_opts)
