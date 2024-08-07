@@ -70,7 +70,7 @@ vim.keymap.set('n', 's', function()
 end)
 
 -- [[ Harpoon ]]
-vim.keymap.set('n', '<leader>a', function() harpoon_require:list():append() end)
+vim.keymap.set('n', '<leader>a', function() harpoon_require:list():add() end)
 vim.keymap.set('n', '<leader>m', function() harpoon_require.ui:toggle_quick_menu(harpoon_require:list()) end)
 vim.keymap.set('n', '<leader>1', function() harpoon_require:list():select(1) end)
 vim.keymap.set('n', '<leader>2', function() harpoon_require:list():select(2) end)
