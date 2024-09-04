@@ -50,7 +50,7 @@ vim.keymap.set('n', '<M-Left>', ':vertical resize -2<CR>', default_opts)
 vim.keymap.set('n', '<M-Right>', ':vertical resize +2<CR>', default_opts)
 
 -- [[ Context Commands ]]
-vim.keymap.set('n', '<leader>w', ':lua vim.lsp.buf.format()<CR>:wa<CR>', {})
+vim.keymap.set('n', '<leader>w', ':wa<CR>', {})
 vim.keymap.set('n', '<leader>q', ':qa<CR>', {})
 vim.keymap.set('n', '<leader>e', ':e!<CR>', {})
 
