@@ -1,11 +1,6 @@
 -- [[ keymap.lua ]]
 
 -- [[ Local Variables ]]
-local telescope_require = require('telescope.builtin')
-local leap_require = require('leap')
-local harpoon_require = require('harpoon')
-local lsp_require = require('lsp-zero')
-local cmp_require = require('cmp')
 local default_opts = { noremap = true, silent = true }
 local lsp_opts = { buffer = bufnr }
 
@@ -55,10 +50,90 @@ vim.keymap.set('n', '<leader>q', ':qa<CR>', {})
 vim.keymap.set('n', '<leader>e', ':e!<CR>', {})
 
 -- [[ Telescope ]]
-vim.keymap.set('n', '<leader>f', telescope_require.find_files, {})
-vim.keymap.set('n', '<leader>g', ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>")
-vim.keymap.set('n', '<leader>d', ":lua require('telescope').extensions.file_browser.file_browser()<CR>")
-vim.keymap.set('n', '<leader>h', telescope_require.help_tags, {})
+vim.keymap.set('n', '<leader>f', Require.telescope_builtin.find_files, {})
+vim.keymap.set('n', '<leader>g', ':lua require("telescope").extensions.live_grep_args.live_grep_args()<CR>')
+vim.keymap.set('n', '<leader>d', ':lua require("telescope").extensions.file_browser.file_browser()<CR>')
+vim.keymap.set('n', '<leader>h', Require.telescope_builtin.help_tags, {})
+Require.telescope.setup({
+    defaults = {
+        mappings = {
+            i = {
+                ['<C-h>'] = 'which_key',
+                ['<C-q>'] = require('telescope-live-grep-args.actions').quote_prompt(),
+                ['<C-f>'] = require('telescope-live-grep-args.actions').quote_prompt({ postfix = ' --iglob ' }),
+                ['<C-j>'] = 'move_selection_next',
+                ['<Down>'] = 'move_selection_next',
+                ['<C-k>'] = 'move_selection_previous',
+                ['<Up>'] = 'move_selection_previous',
+                ['<C-u>'] = 'preview_scrolling_up',
+                ['<C-d>'] = 'preview_scrolling_down',
+                ['<CR>'] = 'select_default',
+                ['<C-c>'] = 'close',
+                ['<C-p>'] = 'nop',
+                ['<C-n>'] = 'nop',
+                ['<C-x>'] = 'nop',
+                ['<C-v>'] = 'nop',
+                ['<C-t>'] = 'nop',
+                ['<PageUp>'] = 'nop',
+                ['<PageDown>'] = 'nop',
+                ['<M-f>'] = 'nop',
+                ['<M-k>'] = 'nop',
+                ['<Tab>'] = 'nop',
+                ['<S-Tab>'] = 'nop',
+                ['<M-q>'] = 'nop',
+                ['<C-l>'] = 'nop',
+                ['<C-/>'] = 'nop',
+                ['<C-w>'] = 'nop',
+                ['<C-r><C-w>'] = 'nop',
+                ['<C-r><C-a>'] = 'nop',
+                ['<C-r><C-f>'] = 'nop',
+                ['<C-r><C-l>'] = 'nop',
+
+            },
+            n = {
+                ['<C-h>'] = 'which_key',
+                ['<C-j>'] = 'move_selection_next',
+                ['j'] = 'move_selection_next',
+                ['<Down>'] = 'move_selection_next',
+                ['<C-k>'] = 'move_selection_previous',
+                ['k'] = 'move_selection_previous',
+                ['<Up>'] = 'move_selection_previous',
+                ['<C-u>'] = 'preview_scrolling_up',
+                ['<C-d>'] = 'preview_scrolling_down',
+                ['H'] = 'move_to_top',
+                ['M'] = 'move_to_middle',
+                ['L'] = 'move_to_bottom',
+                ['gg'] = 'move_to_top',
+                ['G'] = 'move_to_bottom',
+                ['<CR>'] = 'select_default',
+                ['<esc>'] = 'close',
+                ['<C-x>'] = 'nop',
+                ['<C-v>'] = 'nop',
+                ['<C-t>'] = 'nop',
+                ['<Tab>'] = 'nop',
+                ['<S-Tab>'] = 'nop',
+                ['<C-q>'] = 'nop',
+                ['<M-q>'] = 'nop',
+                ['<C-f>'] = 'nop',
+                ['<PageUp>'] = 'nop',
+                ['<PageDown>'] = 'nop',
+                ['<M-f>'] = 'nop',
+                ['<M-k>'] = 'nop',
+                ['?'] = 'nop',
+            }
+        }
+    },
+    extensions = {
+        file_browser = {
+            mappings = {
+                ["i"] = {
+                },
+                ["n"] = {
+                }
+            }
+        }
+    }
+})
 
 -- [[ Leap ]]
 vim.keymap.set('n', 's', function()
@@ -66,35 +141,66 @@ vim.keymap.set('n', 's', function()
         function(win) return vim.api.nvim_win_get_config(win).focusable end,
         vim.api.nvim_tabpage_list_wins(0)
     )
-    leap_require.leap { target_windows = focusable_windows }
+    Require.leap.leap { target_windows = focusable_windows }
 end)
 
 -- [[ Harpoon ]]
-vim.keymap.set('n', '<leader>a', function() harpoon_require:list():add() end)
-vim.keymap.set('n', '<leader>m', function() harpoon_require.ui:toggle_quick_menu(harpoon_require:list()) end)
-vim.keymap.set('n', '<leader>1', function() harpoon_require:list():select(1) end)
-vim.keymap.set('n', '<leader>2', function() harpoon_require:list():select(2) end)
-vim.keymap.set('n', '<leader>3', function() harpoon_require:list():select(3) end)
-vim.keymap.set('n', '<leader>4', function() harpoon_require:list():select(4) end)
-vim.keymap.set('n', '<leader>5', function() harpoon_require:list():select(5) end)
-vim.keymap.set('n', '<leader>6', function() harpoon_require:list():select(6) end)
-vim.keymap.set('n', '<leader>7', function() harpoon_require:list():select(7) end)
-vim.keymap.set('n', '<leader>8', function() harpoon_require:list():select(8) end)
-vim.keymap.set('n', '<leader>9', function() harpoon_require:list():select(9) end)
-vim.keymap.set('n', '<C-n>', function() harpoon_require:list():prev() end)
-vim.keymap.set('n', '<C-m>', function() harpoon_require:list():next() end)
+vim.keymap.set('n', '<leader>a', function() Require.harpoon:list():add() end)
+vim.keymap.set('n', '<leader>m', function() Require.harpoon.ui:toggle_quick_menu(harpoon_require:list()) end)
+vim.keymap.set('n', '<leader>1', function() Require.harpoon:list():select(1) end)
+vim.keymap.set('n', '<leader>2', function() Require.harpoon:list():select(2) end)
+vim.keymap.set('n', '<leader>3', function() Require.harpoon:list():select(3) end)
+vim.keymap.set('n', '<leader>4', function() Require.harpoon:list():select(4) end)
+vim.keymap.set('n', '<leader>5', function() Require.harpoon:list():select(5) end)
+vim.keymap.set('n', '<leader>6', function() Require.harpoon:list():select(6) end)
+vim.keymap.set('n', '<leader>7', function() Require.harpoon:list():select(7) end)
+vim.keymap.set('n', '<leader>8', function() Require.harpoon:list():select(8) end)
+vim.keymap.set('n', '<leader>9', function() Require.harpoon:list():select(9) end)
+vim.keymap.set('n', '<C-n>', function() Require.harpoon:list():prev() end)
+vim.keymap.set('n', '<C-m>', function() Require.harpoon:list():next() end)
 
 -- [[ LSP ]]
-lsp_require.on_attach(function(client, bufnr)
+Require.lsp_zero.on_attach(function(client, bufnr)
     vim.keymap.set('n', 'K', function() vim.lsp.buf.hover() end, lsp_opts)
     vim.keymap.set('n', 'gd', function() vim.lsp.buf.definition() end, lsp_opts)
     vim.keymap.set('n', 'gD', function() vim.lsp.buf.declaration() end, lsp_opts)
     vim.keymap.set('n', 'gr', function() vim.lsp.buf.references() end, lsp_opts)
     vim.keymap.set('n', '<leader>r', function() vim.lsp.buf.rename() end, lsp_opts)
 end)
-cmp_require.setup({
-    mapping = cmp_require.mapping.preset.insert({
-        ['<Tab>'] = lsp_require.cmp_action().tab_complete(),
-        ['<S-Tab>'] = lsp_require.cmp_action().select_prev_or_fallback(),
+
+-- [[ Tab Completion ]]
+local has_words_before = function()
+    if vim.api.nvim_buf_get_option(0, 'buftype') == 'prompt' then return false end
+    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+    return col ~= 0 and vim.api.nvim_buf_get_text(0, line-1, 0, line-1, col, {})[1]:match('^%s*$') == nil
+end
+Require.cmp.setup({
+    mapping = Require.cmp.mapping.preset.insert({
+        ['<C-Space>'] = Require.cmp.mapping.confirm {
+            behavior = Require.cmp.ConfirmBehavior.Insert,
+            select = true,
+        },
+        ['<Tab>'] = function(fallback)
+            if Require.cmp.visible() and has_words_before() then
+                if not Require.cmp.select_next_item() then
+                    if vim.bo.buftype ~= 'prompt' and has_words_before() then
+                        Require.cmp.complete()
+                    end
+                end
+            else
+                fallback()
+            end
+        end,
+        ['<S-Tab>'] = function(fallback)
+            if Require.cmp.visible() and has_words_before() then
+                if not Require.cmp.select_prev_item() then
+                    if vim.bo.buftype ~= 'prompt' and has_words_before() then
+                        Require.cmp.complete()
+                    end
+                end
+            else
+                fallback()
+            end
+        end,
     }),
 })
