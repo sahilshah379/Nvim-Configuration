@@ -126,9 +126,44 @@ Require.telescope.setup({
     extensions = {
         file_browser = {
             mappings = {
-                ["i"] = {
+                ['i'] = {
+                    ['<A-c>'] = false,
+                    ['<C-n>'] = Require.telescope.extensions.file_browser.actions.create,
+                    ['<S-CR>'] = false,
+                    ['<CR>'] = 'create_from_prompt',
+                    ['<A-r>'] = false,
+                    ['<C-r>'] = 'rename',
+                    ['<A-m>'] = 'move',
+                    ['<A-y>'] = 'copy',
+                    ['<A-d>'] = false,
+                    ['<C-x>'] = 'remove',
+                    ['<C-o>'] = false,
+                    ['<C-g>'] = false,
+                    ['<C-]>'] = 'goto_parent_dir',
+                    ['<C-e>'] = false,
+                    ['<C-w>'] = 'goto_cwd',
+                    ['<C-t>'] = false,
+                    ['<C-f>'] = false,
+                    ['<C-h>'] = 'toggle_hidden',
+                    ['<C-s>'] = false,
+                    ['<bs>'] = 'backspace',
+                    [Require.plenary_path.path.sep] = 'path_separator',
                 },
-                ["n"] = {
+                n = {
+                    ['c'] = 'create',
+                    ['r'] = 'rename',
+                    ['m'] = 'move',
+                    ['y'] = 'copy',
+                    ['d'] = 'remove',
+                    ['o'] = false,
+                    ['g'] = 'goto_parent_dir',
+                    ['<C-]>'] = 'goto_parent_dir',
+                    ['e'] = false,
+                    ['w'] = 'goto_cwd',
+                    ['t'] = false,
+                    ['f'] = false,
+                    ['h'] = 'toggle_hidden',
+                    ['s'] = false,
                 }
             }
         }
@@ -146,7 +181,7 @@ end)
 
 -- [[ Harpoon ]]
 vim.keymap.set('n', '<leader>a', function() Require.harpoon:list():add() end)
-vim.keymap.set('n', '<leader>m', function() Require.harpoon.ui:toggle_quick_menu(harpoon_require:list()) end)
+vim.keymap.set('n', '<leader>m', function() Require.harpoon.ui:toggle_quick_menu(Require.harpoon:list()) end)
 vim.keymap.set('n', '<leader>1', function() Require.harpoon:list():select(1) end)
 vim.keymap.set('n', '<leader>2', function() Require.harpoon:list():select(2) end)
 vim.keymap.set('n', '<leader>3', function() Require.harpoon:list():select(3) end)
@@ -176,10 +211,10 @@ local has_words_before = function()
 end
 Require.cmp.setup({
     mapping = Require.cmp.mapping.preset.insert({
-        ['<C-Space>'] = Require.cmp.mapping.confirm {
-            behavior = Require.cmp.ConfirmBehavior.Insert,
-            select = true,
-        },
+        -- ['<C-Space>'] = Require.cmp.mapping.confirm {
+        --     behavior = Require.cmp.ConfirmBehavior.Insert,
+        --     select = true,
+        -- },
         ['<Tab>'] = function(fallback)
             if Require.cmp.visible() and has_words_before() then
                 if not Require.cmp.select_next_item() then
@@ -203,4 +238,61 @@ Require.cmp.setup({
             end
         end,
     }),
+})
+
+-- [[ Avante ]]
+Require.avante.setup({
+    mappings = {
+        diff = {
+            ours = 'co',
+            theirs = 'ct',
+            all_theirs = 'ca',
+            both = 'cb',
+            cursor = 'nop',
+            next = ']x',
+            prev = '[x',
+        },
+        suggestion = {
+            accept = '<M-l>',
+            next = '<M-]>',
+            prev = '<M-[>',
+            dismiss = '<C-]>',
+        },
+        jump = {
+            next = ']]',
+            prev = '[[',
+        },
+        submit = {
+            normal = '<CR>',
+            insert = '<CR>',
+        },
+        cancel = {
+            normal = { '<C-c>', '<Esc>', 'q' },
+            insert = { '<C-c>' },
+        },
+        ask = '<leader>aa',
+        edit = '<leader>ae',
+        refresh = 'nop',
+        focus = 'nop',
+        stop = '<leader>aS',
+        toggle = {
+            default = '<leader>at',
+            debug = '<leader>ad',
+            hint = '<leader>ah',
+            suggestion = '<leader>as',
+            repomap = '<leader>aR',
+        },
+        sidebar = {
+            apply_all = 'A',
+            apply_cursor = 'a',
+            retry_user_request = 'r',
+            edit_user_request = 'e',
+            switch_windows = 'nop',
+            reverse_switch_windows = 'nop',
+            remove_file = 'd',
+            add_file = 'a',
+            close = { },
+            close_from_input = nil,
+        },
+    },
 })

@@ -46,7 +46,7 @@ vim.opt.fileencoding = 'utf8'
 -- [[ Theme ]]
 vim.opt.termguicolors = true
 vim.cmd.colorscheme 'catppuccin'
-vim.api.nvim_set_hl(0, "CmpItemKindCopilot", {fg ="#6CC644"})
+-- vim.api.nvim_set_hl(0, "CmpItemKindCopilot", {fg ="#6CC644"})
 
 
 -- [[ Search ]]

@@ -8,7 +8,6 @@ Plug('catppuccin/nvim')                                              -- theme
 Plug('nvim-lualine/lualine.nvim')                                    -- statusline
 Plug('nvim-treesitter/nvim-treesitter', { ['do'] = 'TSUpdate' })     -- highlighting
 Plug('nvim-lua/plenary.nvim')                                        -- dependency
--- Plug('stevearc/dressing.nvim')                                       -- UI enhancement
 Plug('MunifTanjim/nui.nvim')                                         -- UI dependency
 Plug('nvim-tree/nvim-web-devicons')                                  -- Icons
 Plug('nvim-telescope/telescope.nvim', { ['branch'] = '0.1.x' })      -- fuzzy finder
@@ -23,20 +22,23 @@ Plug('neovim/nvim-lspconfig')                                        -- lsp conf
 Plug('williamboman/mason.nvim')                                      -- lsp installer
 Plug('williamboman/mason-lspconfig.nvim')                            -- mason & lspconfig
 Plug('VonHeikemen/lsp-zero.nvim', { ['branch'] = 'v3.x' })           -- lsp quickstart
-Plug('zbirenbaum/copilot.lua')                                       -- github copilot
+-- Plug('zbirenbaum/copilot.lua')                                       -- github copilot
 Plug('hrsh7th/nvim-cmp')                                             -- completion
 Plug('onsails/lspkind.nvim')                                         -- cmp icons
-Plug('zbirenbaum/copilot-cmp')                                       -- cmp from copilot
+-- Plug('zbirenbaum/copilot-cmp')                                       -- cmp from copilot
 Plug('hrsh7th/cmp-nvim-lsp')                                         -- cmp from lsp
 Plug('hrsh7th/cmp-buffer')                                           -- cmp from buffer
+Plug('hrsh7th/cmp-path')                                             -- cmp from path
+Plug('hrsh7th/cmp-cmdline')                                          -- cmp from cmd
 Plug('MeanderingProgrammer/render-markdown.nvim')                    -- .md render
--- Plug('yetone/avante.nvim', { ['branch'] = 'main', ['do'] = 'make' }) -- avante
+Plug('yetone/avante.nvim', { ['branch'] = 'main', ['do'] = 'make' }) -- avante
 
 vim.call('plug#end')
 
 Require = {}
 Require.lualine = require('lualine')
 Require.treesitter = require('nvim-treesitter.configs')
+Require.plenary_path = require('plenary.path')
 Require.telescope = require('telescope')
 Require.telescope_builtin = require('telescope.builtin')
 Require.comment = require('Comment')
@@ -47,11 +49,13 @@ Require.auto_session = require('auto-session')
 Require.mason = require('mason')
 Require.mason_lspconfig = require('mason-lspconfig')
 Require.lsp_zero = require('lsp-zero')
-Require.copilot = require('copilot')
+-- Require.copilot = require('copilot')
 Require.cmp = require('cmp')
 Require.lspkind = require('lspkind')
-Require.copilot_cmp = require('copilot_cmp')
-Require.copilot_cmp_comparators = require('copilot_cmp.comparators')
+-- Require.copilot_cmp = require('copilot_cmp')
+-- Require.copilot_cmp_comparators = require('copilot_cmp.comparators')
+Require.render_markdown = require('render-markdown')
+Require.avante = require('avante')
 
 Require.lualine.setup({
     options = {
@@ -159,10 +163,10 @@ Require.lsp_zero.set_server_config({
     end,
 })
 
-Require.copilot.setup({
-    suggestion = { enabled = false },
-    panel = { enabled = false },
-})
+-- Require.copilot.setup({
+--     suggestion = { enabled = false },
+--     panel = { enabled = false },
+-- })
 
 Require.cmp.setup({
     formatting = {
@@ -172,7 +176,7 @@ Require.cmp.setup({
                 menu = 50,
                 abbr = 50,
             },
-            symbol_map = { Copilot = '' },
+            -- symbol_map = { Copilot = '' },
             ellipsis_char = '...',
             show_labelDetails = true,
             before = function (entry, vim_item)
@@ -180,25 +184,27 @@ Require.cmp.setup({
             end
         })
     },
-    sorting = {
-        priority_weight = 2,
-        comparators = {
-            Require.copilot_cmp_comparators.prioritize,
-            Require.cmp.config.compare.offset,
-            Require.cmp.config.compare.exact,
-            Require.cmp.config.compare.score,
-            Require.cmp.config.compare.recently_used,
-            Require.cmp.config.compare.locality,
-            Require.cmp.config.compare.kind,
-            Require.cmp.config.compare.sort_text,
-            Require.cmp.config.compare.length,
-            Require.cmp.config.compare.order,
-        },
-    },
+    -- sorting = {
+    --     priority_weight = 2,
+    --     comparators = {
+    --         Require.copilot_cmp_comparators.prioritize,
+    --         Require.cmp.config.compare.offset,
+    --         Require.cmp.config.compare.exact,
+    --         Require.cmp.config.compare.score,
+    --         Require.cmp.config.compare.recently_used,
+    --         Require.cmp.config.compare.locality,
+    --         Require.cmp.config.compare.kind,
+    --         Require.cmp.config.compare.sort_text,
+    --         Require.cmp.config.compare.length,
+    --         Require.cmp.config.compare.order,
+    --     },
+    -- },
     sources = {
-        { name = 'copilot', group_index = 2 },
-        { name = 'nvim_lsp', group_index = 2 },
-        { name = 'buffer' , group_index = 2 },
+        -- { name = 'copilot', group_index = 2 },
+        -- { name = 'nvim_lsp', group_index = 2 },
+        -- { name = 'buffer' , group_index = 2 },
+        { name = 'nvim_lsp' },
+        { name = 'buffer' },
     },
     window = {
         completion = Require.cmp.config.window.bordered(),
@@ -221,6 +227,85 @@ Require.cmp.setup.cmdline(':', {
     matching = { disallow_symbol_nonprefix_matching = false }
 })
 
-Require.copilot_cmp.setup()
+-- Require.copilot_cmp.setup()
 
--- require('avante').setup()
+Require.render_markdown.setup({
+    opts = {
+        filetypes = {
+            'markdown',
+            'Avante',
+        },
+    },
+    ft = {
+        'markdown',
+        'Avante',
+    }
+})
+
+Require.avante.setup({
+    provider = 'openai',
+    auto_suggestions_provider = 'openai',
+    cursor_applying_provider = nil,
+    claude = {
+        endpoint = 'https://api.openai.com',
+        model = 'gpt-4o-mini',
+        temperature = 0,
+        max_tokens = 16384,
+        reasoning_effort='medium'
+    },
+    dual_boost = {
+        enabled = false,
+    },
+    behaviour = {
+        auto_suggestions = false,
+        auto_set_highlight_group = true,
+        auto_set_keymaps = true,
+        auto_apply_diff_after_generation = false,
+        support_paste_from_clipboard = false,
+        minimize_diff = true,
+        enable_token_counting = true,
+        enable_cursor_planning_mode = false,
+        enable_claude_text_editor_tool_mode = false,
+    },
+    hints = { enabled = true },
+    windows = {
+        position = 'right',
+        wrap = true,
+        width = 30,
+        sidebar_header = {
+            enabled = true,
+            align = 'center',
+            rounded = true,
+        },
+        input = {
+            prefix = '> ',
+            height = 8,
+        },
+        edit = {
+            border = 'rounded',
+            start_insert = true,
+        },
+        ask = {
+            floating = false,
+            start_insert = false,
+            border = 'rounded',
+            focus_on_apply = 'ours',
+        },
+    },
+    highlights = {
+        diff = {
+            current = 'DiffText',
+            incoming = 'DiffAdd',
+        },
+    },
+    diff = {
+        autojump = true,
+        list_opener = 'copen',
+        override_timeoutlen = 500,
+    },
+    suggestion = {
+        debounce = 600,
+        throttle = 600,
+    }
+})
+
