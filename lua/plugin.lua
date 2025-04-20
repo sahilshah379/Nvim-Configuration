@@ -9,6 +9,7 @@ Plug('nvim-lualine/lualine.nvim')                                    -- statusli
 Plug('nvim-treesitter/nvim-treesitter', { ['do'] = 'TSUpdate' })     -- highlighting
 Plug('nvim-lua/plenary.nvim')                                        -- dependency
 Plug('MunifTanjim/nui.nvim')                                         -- UI dependency
+Plug('stevearc/dressing.nvim')                                       -- UI dependency
 Plug('nvim-tree/nvim-web-devicons')                                  -- Icons
 Plug('nvim-telescope/telescope.nvim', { ['branch'] = '0.1.x' })      -- fuzzy finder
 Plug('nvim-telescope/telescope-live-grep-args.nvim')                 -- telescope grep
@@ -22,10 +23,8 @@ Plug('neovim/nvim-lspconfig')                                        -- lsp conf
 Plug('williamboman/mason.nvim')                                      -- lsp installer
 Plug('williamboman/mason-lspconfig.nvim')                            -- mason & lspconfig
 Plug('VonHeikemen/lsp-zero.nvim', { ['branch'] = 'v3.x' })           -- lsp quickstart
--- Plug('zbirenbaum/copilot.lua')                                       -- github copilot
 Plug('hrsh7th/nvim-cmp')                                             -- completion
 Plug('onsails/lspkind.nvim')                                         -- cmp icons
--- Plug('zbirenbaum/copilot-cmp')                                       -- cmp from copilot
 Plug('hrsh7th/cmp-nvim-lsp')                                         -- cmp from lsp
 Plug('hrsh7th/cmp-buffer')                                           -- cmp from buffer
 Plug('hrsh7th/cmp-path')                                             -- cmp from path
@@ -36,6 +35,7 @@ Plug('yetone/avante.nvim', { ['branch'] = 'main', ['do'] = 'make' }) -- avante
 vim.call('plug#end')
 
 Require = {}
+Require.catppuccin = require('catppuccin')
 Require.lualine = require('lualine')
 Require.treesitter = require('nvim-treesitter.configs')
 Require.plenary_path = require('plenary.path')
@@ -49,13 +49,16 @@ Require.auto_session = require('auto-session')
 Require.mason = require('mason')
 Require.mason_lspconfig = require('mason-lspconfig')
 Require.lsp_zero = require('lsp-zero')
--- Require.copilot = require('copilot')
 Require.cmp = require('cmp')
 Require.lspkind = require('lspkind')
--- Require.copilot_cmp = require('copilot_cmp')
--- Require.copilot_cmp_comparators = require('copilot_cmp.comparators')
 Require.render_markdown = require('render-markdown')
 Require.avante = require('avante')
+Require.avante_config = require('avante.config')
+
+Require.catppuccin.setup({
+    flavour = 'mocha',
+})
+vim.cmd('colorscheme catppuccin')
 
 Require.lualine.setup({
     options = {
@@ -73,7 +76,7 @@ Require.lualine.setup({
 
 Require.treesitter.setup({
     ensure_installed = {
-        'bash', 'c', 'comment', 'cpp', 'java', 'javascript', 'lua', 'python', 'tmux', 'yaml'
+        'bash', 'c', 'comment', 'cpp', 'java', 'javascript', 'lua', 'markdown', 'markdown_inline', 'python', 'tmux', 'yaml'
     },
     sync_install = false,
     auto_install = true,
@@ -163,11 +166,6 @@ Require.lsp_zero.set_server_config({
     end,
 })
 
--- Require.copilot.setup({
---     suggestion = { enabled = false },
---     panel = { enabled = false },
--- })
-
 Require.cmp.setup({
     formatting = {
         format = Require.lspkind.cmp_format({
@@ -184,25 +182,7 @@ Require.cmp.setup({
             end
         })
     },
-    -- sorting = {
-    --     priority_weight = 2,
-    --     comparators = {
-    --         Require.copilot_cmp_comparators.prioritize,
-    --         Require.cmp.config.compare.offset,
-    --         Require.cmp.config.compare.exact,
-    --         Require.cmp.config.compare.score,
-    --         Require.cmp.config.compare.recently_used,
-    --         Require.cmp.config.compare.locality,
-    --         Require.cmp.config.compare.kind,
-    --         Require.cmp.config.compare.sort_text,
-    --         Require.cmp.config.compare.length,
-    --         Require.cmp.config.compare.order,
-    --     },
-    -- },
     sources = {
-        -- { name = 'copilot', group_index = 2 },
-        -- { name = 'nvim_lsp', group_index = 2 },
-        -- { name = 'buffer' , group_index = 2 },
         { name = 'nvim_lsp' },
         { name = 'buffer' },
     },
@@ -227,31 +207,24 @@ Require.cmp.setup.cmdline(':', {
     matching = { disallow_symbol_nonprefix_matching = false }
 })
 
--- Require.copilot_cmp.setup()
-
 Require.render_markdown.setup({
-    opts = {
-        filetypes = {
-            'markdown',
-            'Avante',
-        },
-    },
-    ft = {
+    file_types = {
         'markdown',
         'Avante',
-    }
+    },
 })
 
 Require.avante.setup({
     provider = 'openai',
-    auto_suggestions_provider = 'openai',
+    auto_suggestions_provider = nil,
     cursor_applying_provider = nil,
-    claude = {
-        endpoint = 'https://api.openai.com',
-        model = 'gpt-4o-mini',
+    openai = {
+        endpoint = 'https://api.openai.com/v1',
+        model = 'gpt-4o',
+        timeout = 30000,
         temperature = 0,
         max_tokens = 16384,
-        reasoning_effort='medium'
+        -- reasoning_effort='medium'
     },
     dual_boost = {
         enabled = false,
@@ -261,13 +234,13 @@ Require.avante.setup({
         auto_set_highlight_group = true,
         auto_set_keymaps = true,
         auto_apply_diff_after_generation = false,
-        support_paste_from_clipboard = false,
+        support_paste_from_clipboard = true,
         minimize_diff = true,
         enable_token_counting = true,
         enable_cursor_planning_mode = false,
         enable_claude_text_editor_tool_mode = false,
     },
-    hints = { enabled = true },
+    hints = { enabled = false },
     windows = {
         position = 'right',
         wrap = true,
@@ -297,6 +270,13 @@ Require.avante.setup({
             current = 'DiffText',
             incoming = 'DiffAdd',
         },
+    },
+    avante = {
+        background = 'Normal',
+        border = 'FloatBorder',
+        text = 'Normal',
+        prompt = 'Normal',
+        hint = 'Comment',
     },
     diff = {
         autojump = true,

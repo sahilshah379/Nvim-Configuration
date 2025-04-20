@@ -128,47 +128,42 @@ Require.telescope.setup({
             mappings = {
                 ['i'] = {
                     ['<A-c>'] = false,
-                    ['<C-n>'] = Require.telescope.extensions.file_browser.actions.create,
                     ['<S-CR>'] = false,
-                    ['<CR>'] = 'create_from_prompt',
                     ['<A-r>'] = false,
-                    ['<C-r>'] = 'rename',
-                    ['<A-m>'] = 'move',
-                    ['<A-y>'] = 'copy',
+                    ['<A-m>'] = false,
+                    ['<A-y>'] = false,
                     ['<A-d>'] = false,
-                    ['<C-x>'] = 'remove',
                     ['<C-o>'] = false,
                     ['<C-g>'] = false,
-                    ['<C-]>'] = 'goto_parent_dir',
                     ['<C-e>'] = false,
-                    ['<C-w>'] = 'goto_cwd',
+                    ['<C-w>'] = false,
                     ['<C-t>'] = false,
                     ['<C-f>'] = false,
-                    ['<C-h>'] = 'toggle_hidden',
+                    ['<C-h>'] = false,
                     ['<C-s>'] = false,
-                    ['<bs>'] = 'backspace',
-                    [Require.plenary_path.path.sep] = 'path_separator',
+                    ['<bs>'] = false,
+                    [Require.plenary_path.path.sep] = false,
                 },
                 n = {
-                    ['c'] = 'create',
-                    ['r'] = 'rename',
-                    ['m'] = 'move',
-                    ['y'] = 'copy',
-                    ['d'] = 'remove',
-                    ['o'] = false,
-                    ['g'] = 'goto_parent_dir',
-                    ['<C-]>'] = 'goto_parent_dir',
+                    ['c'] = Require.telescope.extensions.file_browser.actions.create,
+                    ['r'] = Require.telescope.extensions.file_browser.actions.rename,
+                    ['m'] = Require.telescope.extensions.file_browser.actions.move,
+                    ['y'] = Require.telescope.extensions.file_browser.actions.copy,
+                    ['d'] = Require.telescope.extensions.file_browser.actions.remove,
+                    ['o'] = Require.telescope.extensions.file_browser.actions.open,
+                    ['p'] = Require.telescope.extensions.file_browser.actions.goto_parent_dir,
                     ['e'] = false,
-                    ['w'] = 'goto_cwd',
+                    ['w'] = Require.telescope.extensions.file_browser.actions.goto_cwd,
                     ['t'] = false,
                     ['f'] = false,
-                    ['h'] = 'toggle_hidden',
+                    ['h'] = Require.telescope.extensions.file_browser.actions.toggle_hidden,
                     ['s'] = false,
                 }
             }
         }
     }
 })
+Require.telescope.load_extension('file_browser')
 
 -- [[ Leap ]]
 vim.keymap.set('n', 's', function()
@@ -211,10 +206,6 @@ local has_words_before = function()
 end
 Require.cmp.setup({
     mapping = Require.cmp.mapping.preset.insert({
-        -- ['<C-Space>'] = Require.cmp.mapping.confirm {
-        --     behavior = Require.cmp.ConfirmBehavior.Insert,
-        --     select = true,
-        -- },
         ['<Tab>'] = function(fallback)
             if Require.cmp.visible() and has_words_before() then
                 if not Require.cmp.select_next_item() then
@@ -241,26 +232,20 @@ Require.cmp.setup({
 })
 
 -- [[ Avante ]]
-Require.avante.setup({
+Require.avante_config.override({
     mappings = {
         diff = {
-            ours = 'co',
-            theirs = 'ct',
-            all_theirs = 'ca',
-            both = 'cb',
+            ours = 'x',
+            theirs = 'y',
+            all_theirs = 'Y',
+            both = 'nop',
             cursor = 'nop',
-            next = ']x',
-            prev = '[x',
-        },
-        suggestion = {
-            accept = '<M-l>',
-            next = '<M-]>',
-            prev = '<M-[>',
-            dismiss = '<C-]>',
+            next = 'J',
+            prev = 'K',
         },
         jump = {
-            next = ']]',
-            prev = '[[',
+            next = 'nop',
+            prev = 'nop'
         },
         submit = {
             normal = '<CR>',
@@ -270,25 +255,13 @@ Require.avante.setup({
             normal = { '<C-c>', '<Esc>', 'q' },
             insert = { '<C-c>' },
         },
-        ask = '<leader>aa',
-        edit = '<leader>ae',
-        refresh = 'nop',
-        focus = 'nop',
-        stop = '<leader>aS',
-        toggle = {
-            default = '<leader>at',
-            debug = '<leader>ad',
-            hint = '<leader>ah',
-            suggestion = '<leader>as',
-            repomap = '<leader>aR',
-        },
         sidebar = {
             apply_all = 'A',
             apply_cursor = 'a',
             retry_user_request = 'r',
             edit_user_request = 'e',
-            switch_windows = 'nop',
-            reverse_switch_windows = 'nop',
+            switch_windows = '<Tab>',
+            reverse_switch_windows = '<S-Tab>',
             remove_file = 'd',
             add_file = 'a',
             close = { },
@@ -296,3 +269,8 @@ Require.avante.setup({
         },
     },
 })
+vim.keymap.set('n', '<leader>z', '<Plug>(AvanteAsk)',  default_opts)
+vim.keymap.set('n', '<leader>x', '<Plug>(AvanteEdit)', default_opts)
+vim.keymap.set('v', '<leader>z', '<Plug>(AvanteAsk)',  default_opts)
+vim.keymap.set('v', '<leader>x', '<Plug>(AvanteEdit)', default_opts)
+
