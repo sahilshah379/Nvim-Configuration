@@ -23,13 +23,15 @@ Plug('neovim/nvim-lspconfig')                                        -- lsp conf
 Plug('williamboman/mason.nvim')                                      -- lsp installer
 Plug('williamboman/mason-lspconfig.nvim')                            -- mason & lspconfig
 Plug('VonHeikemen/lsp-zero.nvim', { ['branch'] = 'v3.x' })           -- lsp quickstart
+Plug('zbirenbaum/copilot.lua')                                       -- github copilot
 Plug('hrsh7th/nvim-cmp')                                             -- completion
 Plug('onsails/lspkind.nvim')                                         -- cmp icons
+Plug('zbirenbaum/copilot-cmp')                                       -- cmp from copilot
 Plug('hrsh7th/cmp-nvim-lsp')                                         -- cmp from lsp
 Plug('hrsh7th/cmp-buffer')                                           -- cmp from buffer
 Plug('hrsh7th/cmp-path')                                             -- cmp from path
 Plug('hrsh7th/cmp-cmdline')                                          -- cmp from cmd
-Plug('MeanderingProgrammer/render-markdown.nvim')                    -- .md render
+Plug('MeanderingProgrammer/render-markdown.nvim')                    -- markdown render
 Plug('yetone/avante.nvim', { ['branch'] = 'main', ['do'] = 'make' }) -- avante
 
 vim.call('plug#end')
@@ -49,10 +51,14 @@ Require.auto_session = require('auto-session')
 Require.mason = require('mason')
 Require.mason_lspconfig = require('mason-lspconfig')
 Require.lsp_zero = require('lsp-zero')
+Require.copilot = require('copilot')
 Require.cmp = require('cmp')
 Require.lspkind = require('lspkind')
+Require.copilot_cmp = require('copilot_cmp')
+Require.copilot_cmp_comparators = require('copilot_cmp.comparators')
 Require.render_markdown = require('render-markdown')
 Require.avante = require('avante')
+Require.avante_api = require('avante.api')
 Require.avante_config = require('avante.config')
 
 Require.catppuccin.setup({
@@ -166,6 +172,11 @@ Require.lsp_zero.set_server_config({
     end,
 })
 
+Require.copilot.setup({
+    suggestion = { enabled = false },
+    panel = { enabled = false },
+})
+
 Require.cmp.setup({
     formatting = {
         format = Require.lspkind.cmp_format({
@@ -174,7 +185,7 @@ Require.cmp.setup({
                 menu = 50,
                 abbr = 50,
             },
-            -- symbol_map = { Copilot = '' },
+            symbol_map = { Copilot = '' },
             ellipsis_char = '...',
             show_labelDetails = true,
             before = function (entry, vim_item)
@@ -182,9 +193,25 @@ Require.cmp.setup({
             end
         })
     },
+    sorting = {
+        priority_weight = 2,
+        comparators = {
+            Require.copilot_cmp_comparators.prioritize,
+            Require.cmp.config.compare.offset,
+            Require.cmp.config.compare.exact,
+            Require.cmp.config.compare.score,
+            Require.cmp.config.compare.recently_used,
+            Require.cmp.config.compare.locality,
+            Require.cmp.config.compare.kind,
+            Require.cmp.config.compare.sort_text,
+            Require.cmp.config.compare.length,
+            Require.cmp.config.compare.order,
+        },
+    },
     sources = {
-        { name = 'nvim_lsp' },
-        { name = 'buffer' },
+        { name = 'copilot', group_index = 2 },
+        { name = 'nvim_lsp', group_index = 2 },
+        { name = 'buffer' , group_index = 2 },
     },
     window = {
         completion = Require.cmp.config.window.bordered(),
@@ -207,6 +234,8 @@ Require.cmp.setup.cmdline(':', {
     matching = { disallow_symbol_nonprefix_matching = false }
 })
 
+Require.copilot_cmp.setup()
+
 Require.render_markdown.setup({
     file_types = {
         'markdown',
@@ -220,12 +249,12 @@ Require.avante.setup({
     cursor_applying_provider = nil,
     openai = {
         endpoint = 'https://api.openai.com/v1',
-        model = 'gpt-4o',
+        model = 'o3-mini',
         timeout = 30000,
         temperature = 0,
-        max_tokens = 16384,
-        -- reasoning_effort='medium'
+        max_completion_tokens = 16384,
     },
+    reasoning_effort='medium',
     dual_boost = {
         enabled = false,
     },

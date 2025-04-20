@@ -5,7 +5,10 @@ local default_opts = { noremap = true, silent = true }
 local lsp_opts = { buffer = bufnr }
 
 -- [[ General ]]
-vim.keymap.set('n', '<ESC>', ':nohlsearch<Bar>:echo<CR>', default_opts)
+vim.keymap.set('n', '<ESC>', function()
+    vim.cmd('nohlsearch')
+    vim.cmd('echo')
+end, default_opts)
 vim.keymap.set('n', 'n', 'nzz', default_opts)
 vim.keymap.set('n', 'N', 'Nzz', default_opts)
 vim.keymap.set('n', '<C-u>', '<C-u>zz', default_opts)
@@ -35,25 +38,25 @@ vim.keymap.set('v', '<leader>p', '"+p', default_opts)
 vim.keymap.set('v', '<leader>P', '"+P', default_opts)
 
 -- [[ Windows ]]
-vim.keymap.set('n', '<C-h>', '<cmd><C-U>TmuxNavigateLeft<CR>', default_opts)
-vim.keymap.set('n', '<C-j>', '<cmd><C-U>TmuxNavigateDown<CR>', default_opts)
-vim.keymap.set('n', '<C-k>', '<cmd><C-U>TmuxNavigateUp<CR>', default_opts)
-vim.keymap.set('n', '<C-l>', '<cmd><C-U>TmuxNavigateRight<CR>', default_opts)
-vim.keymap.set('n', '<M-Up>', ':resize +2<CR>', default_opts)
-vim.keymap.set('n', '<M-Down>', ':resize -2<CR>', default_opts)
-vim.keymap.set('n', '<M-Left>', ':vertical resize -2<CR>', default_opts)
-vim.keymap.set('n', '<M-Right>', ':vertical resize +2<CR>', default_opts)
+vim.keymap.set('n', '<C-h>', function() vim.cmd('TmuxNavigateLeft') end, default_opts)
+vim.keymap.set('n', '<C-j>', function() vim.cmd('TmuxNavigateDown') end, default_opts)
+vim.keymap.set('n', '<C-k>', function() vim.cmd('TmuxNavigateUp') end, default_opts)
+vim.keymap.set('n', '<C-l>', function() vim.cmd('TmuxNavigateRight') end, default_opts)
+vim.keymap.set('n', '<M-Up>',    function() vim.cmd('resize +2') end, default_opts)
+vim.keymap.set('n', '<M-Down>',  function() vim.cmd('resize -2') end, default_opts)
+vim.keymap.set('n', '<M-Left>',  function() vim.cmd('vertical resize -2') end, default_opts)
+vim.keymap.set('n', '<M-Right>', function() vim.cmd('vertical resize +2') end, default_opts)
 
 -- [[ Context Commands ]]
-vim.keymap.set('n', '<leader>w', ':wa<CR>', {})
-vim.keymap.set('n', '<leader>q', ':qa<CR>', {})
-vim.keymap.set('n', '<leader>e', ':e!<CR>', {})
+vim.keymap.set('n', '<leader>w', function() vim.cmd('wa') end, default_opts)
+vim.keymap.set('n', '<leader>q', function() vim.cmd('qa') end, default_opts)
+vim.keymap.set('n', '<leader>e', function() vim.cmd('e!') end, default_opts)
 
 -- [[ Telescope ]]
-vim.keymap.set('n', '<leader>f', Require.telescope_builtin.find_files, {})
-vim.keymap.set('n', '<leader>g', ':lua require("telescope").extensions.live_grep_args.live_grep_args()<CR>')
-vim.keymap.set('n', '<leader>d', ':lua require("telescope").extensions.file_browser.file_browser()<CR>')
-vim.keymap.set('n', '<leader>h', Require.telescope_builtin.help_tags, {})
+vim.keymap.set('n', '<leader>f', Require.telescope_builtin.find_files, default_opts)
+vim.keymap.set('n', '<leader>g', function() Require.telescope.extensions.live_grep_args.live_grep_args() end, default_opts)
+vim.keymap.set('n', '<leader>d', function() Require.telescope.extensions.file_browser.file_browser() end, default_opts)
+vim.keymap.set('n', '<leader>h', Require.telescope_builtin.help_tags, default_opts)
 Require.telescope.setup({
     defaults = {
         mappings = {
@@ -150,7 +153,7 @@ Require.telescope.setup({
                     ['m'] = Require.telescope.extensions.file_browser.actions.move,
                     ['y'] = Require.telescope.extensions.file_browser.actions.copy,
                     ['d'] = Require.telescope.extensions.file_browser.actions.remove,
-                    ['o'] = Require.telescope.extensions.file_browser.actions.open,
+                    ['o'] = false,
                     ['p'] = Require.telescope.extensions.file_browser.actions.goto_parent_dir,
                     ['e'] = false,
                     ['w'] = Require.telescope.extensions.file_browser.actions.goto_cwd,
@@ -206,6 +209,10 @@ local has_words_before = function()
 end
 Require.cmp.setup({
     mapping = Require.cmp.mapping.preset.insert({
+        ['<C-Space>'] = Require.cmp.mapping.confirm {
+            behavior = Require.cmp.ConfirmBehavior.Insert,
+            select = true,
+        },
         ['<Tab>'] = function(fallback)
             if Require.cmp.visible() and has_words_before() then
                 if not Require.cmp.select_next_item() then
@@ -269,8 +276,32 @@ Require.avante_config.override({
         },
     },
 })
-vim.keymap.set('n', '<leader>z', '<Plug>(AvanteAsk)',  default_opts)
-vim.keymap.set('n', '<leader>x', '<Plug>(AvanteEdit)', default_opts)
-vim.keymap.set('v', '<leader>z', '<Plug>(AvanteAsk)',  default_opts)
-vim.keymap.set('v', '<leader>x', '<Plug>(AvanteEdit)', default_opts)
-
+vim.keymap.set('n', '<leader>z', function()
+    Require.avante_api.ask()
+    vim.cmd('wincmd =')
+end, default_opts)
+vim.keymap.set('v', '<leader>z', function()
+    Require.avante_api.ask()
+    vim.cmd('wincmd =')
+    vim.cmd('normal! <Esc>')
+end, default_opts)
+vim.keymap.set('n', '<leader>x', function() Require.avante_api.edit() end, default_opts)
+vim.keymap.set('v', '<leader>x', function() Require.avante_api.edit() end, default_opts)
+vim.keymap.set('n', '<leader>s', function() Require.avante_api.stop() end, default_opts)
+vim.keymap.set('v', '<leader>s', function() Require.avante_api.stop() end, default_opts)
+vim.keymap.set('n', '<leader>aa', '', default_opts)
+vim.keymap.set('n', '<leader>at', '', default_opts)
+vim.keymap.set('n', '<leader>ar', '', default_opts)
+vim.keymap.set('n', '<leader>af', '', default_opts)
+vim.keymap.set('n', '<leader>a?', '', default_opts)
+vim.keymap.set('n', '<leader>ae', '', default_opts)
+vim.keymap.set('n', '<leader>aS', '', default_opts)
+vim.keymap.set('n', '<leader>ah', '', default_opts)
+vim.keymap.set('v', '<leader>aa', '', default_opts)
+vim.keymap.set('v', '<leader>at', '', default_opts)
+vim.keymap.set('v', '<leader>ar', '', default_opts)
+vim.keymap.set('v', '<leader>af', '', default_opts)
+vim.keymap.set('v', '<leader>a?', '', default_opts)
+vim.keymap.set('v', '<leader>ae', '', default_opts)
+vim.keymap.set('v', '<leader>aS', '', default_opts)
+vim.keymap.set('v', '<leader>ah', '', default_opts)
