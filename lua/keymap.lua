@@ -239,6 +239,10 @@ Require.cmp.setup({
 })
 
 -- [[ Avante ]]
+local function sidebar_open()
+    local sidebar = Require.avante.get()
+    return sidebar and sidebar:is_open()
+end
 Require.avante_config.override({
     mappings = {
         diff = {
@@ -287,8 +291,29 @@ vim.keymap.set('v', '<leader>z', function()
 end, default_opts)
 vim.keymap.set('n', '<leader>x', function() Require.avante_api.edit() end, default_opts)
 vim.keymap.set('v', '<leader>x', function() Require.avante_api.edit() end, default_opts)
-vim.keymap.set('n', '<leader>s', function() Require.avante_api.stop() end, default_opts)
-vim.keymap.set('v', '<leader>s', function() Require.avante_api.stop() end, default_opts)
+vim.keymap.set('n', '<leader>s', function()
+    if sidebar_open() then
+        Require.avante_api.stop()
+    end
+end, default_opts)
+vim.keymap.set('v', '<leader>s', function()
+    if sidebar_open() then
+        Require.avante_api.stop()
+    end
+end, default_opts)
+vim.keymap.set('n', '<leader>c', function()
+    if sidebar_open() then
+        Require.avante_api.select_model()
+    end
+end, default_opts)
+vim.keymap.set('v', '<leader>c', function()
+    if sidebar_open() then
+        Require.avante_api.select_model()
+    end
+end, default_opts)
+vim.keymap.set('v', 'x', function() Require.avante_api.diff_ours() end, default_opts)
+vim.keymap.set('v', 'y', function() Require.avante_api.diff_theirs() end, default_opts)
+vim.keymap.set('v', 'Y', function() Require.avante_api.diff_all_theirs() end, default_opts)
 vim.keymap.set('n', '<leader>aa', '', default_opts)
 vim.keymap.set('n', '<leader>at', '', default_opts)
 vim.keymap.set('n', '<leader>ar', '', default_opts)
