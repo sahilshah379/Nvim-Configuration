@@ -18,6 +18,20 @@ vim.opt.wrap = true
 vim.g.tmux_navigator_no_wrap = 1
 vim.cmd('highlight ColorColumn ctermbg=lightgrey guibg=lightgrey')
 
+-- [[ Clipboard ]]
+local function copy(lines, _)
+  Require.osc52.copy(table.concat(lines, '\n'))
+end
+local function paste()
+  return {vim.fn.split(vim.fn.getreg(''), '\n'), vim.fn.getregtype('')}
+end
+vim.g.clipboard = {
+  name = 'osc52',
+  copy = {['+'] = copy, ['*'] = copy},
+  paste = {['+'] = paste, ['*'] = paste},
+}
+
+
 -- [[ Diagnostics ]]
 vim.diagnostic.config({
     virtual_text = false,

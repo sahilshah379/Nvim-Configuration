@@ -32,17 +32,6 @@ vim.keymap.set('i', '<S-Tab>', '<C-d>', default_opts)
 -- [[ Clipboard ]]
 vim.keymap.set('n', '<leader>y', '"+y', default_opts)
 vim.keymap.set('v', '<leader>y', '"+y', default_opts)
-vim.keymap.set('n', '<leader>p', '"+p', default_opts)
-vim.keymap.set('n', '<leader>P', '"+P', default_opts)
-vim.keymap.set('v', '<leader>p', '"+p', default_opts)
-vim.keymap.set('v', '<leader>P', '"+P', default_opts)
-vim.api.nvim_create_autocmd('TextYankPost', {
-  callback = function()
-    if vim.v.event.regname == '+' then
-      Require.osc52.copy_register('+')
-    end
-  end,
-})
 
 -- [[ Windows ]]
 vim.keymap.set('n', '<C-h>', function() vim.cmd('TmuxNavigateLeft') end, default_opts)

@@ -159,6 +159,11 @@ Require.auto_session.setup({
     },
 })
 
+Require.osc52.setup({
+    silent = true,
+    tmux_passthrough = true
+})
+
 Require.mason.setup()
 Require.mason_lspconfig.setup({
     ensure_installed = {
