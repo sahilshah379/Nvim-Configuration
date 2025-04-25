@@ -19,6 +19,7 @@ Plug('ggandor/leap.nvim')                                            -- jump to 
 Plug('ThePrimeagen/harpoon', { ['branch'] = 'harpoon2' })            -- marks
 Plug('rmagatti/auto-session')                                        -- session manager
 Plug('christoomey/vim-tmux-navigator')                               -- tmux movement
+Plug('ojroques/nvim-osc52')                                          -- ansi osc52
 Plug('neovim/nvim-lspconfig')                                        -- lsp config
 Plug('williamboman/mason.nvim')                                      -- lsp installer
 Plug('williamboman/mason-lspconfig.nvim')                            -- mason & lspconfig
@@ -48,6 +49,7 @@ Require.comment_utils = require('Comment.utils')
 Require.leap = require('leap')
 Require.harpoon = require('harpoon')
 Require.auto_session = require('auto-session')
+Require.osc52 = require('osc52')
 Require.mason = require('mason')
 Require.mason_lspconfig = require('mason-lspconfig')
 Require.lsp_zero = require('lsp-zero')
@@ -60,6 +62,7 @@ Require.render_markdown = require('render-markdown')
 Require.avante = require('avante')
 Require.avante_api = require('avante.api')
 Require.avante_config = require('avante.config')
+Require.avante_diff = require('avante.diff')
 
 Require.catppuccin.setup({
     flavour = 'mocha',

@@ -8,20 +8,6 @@ vim.opt.updatetime = 300
 vim.opt.swapfile = false
 vim.opt.mouse = nil
 
--- [[ Clipboard ]]
-vim.g.clipboard = {
-    name = 'WslClipboard',
-    copy = {
-        ['+'] = 'clip.exe',
-        ['*'] = 'clip.exe',
-    },
-    paste = {
-        ['+'] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
-        ['*'] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
-    },
-    cache_enabled = 0,
-}
-
 -- [[ Screen ]]
 vim.opt.colorcolumn = '80'
 vim.opt.number = true

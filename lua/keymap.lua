@@ -36,6 +36,13 @@ vim.keymap.set('n', '<leader>p', '"+p', default_opts)
 vim.keymap.set('n', '<leader>P', '"+P', default_opts)
 vim.keymap.set('v', '<leader>p', '"+p', default_opts)
 vim.keymap.set('v', '<leader>P', '"+P', default_opts)
+vim.api.nvim_create_autocmd('TextYankPost', {
+  callback = function()
+    if vim.v.event.regname == '+' then
+      Require.osc52.copy_register('+')
+    end
+  end,
+})
 
 -- [[ Windows ]]
 vim.keymap.set('n', '<C-h>', function() vim.cmd('TmuxNavigateLeft') end, default_opts)
@@ -311,9 +318,27 @@ vim.keymap.set('v', '<leader>c', function()
         Require.avante_api.select_model()
     end
 end, default_opts)
-vim.keymap.set('v', 'x', function() Require.avante_api.diff_ours() end, default_opts)
-vim.keymap.set('v', 'y', function() Require.avante_api.diff_theirs() end, default_opts)
-vim.keymap.set('v', 'Y', function() Require.avante_api.diff_all_theirs() end, default_opts)
+vim.keymap.set('v', 'x', function()
+    if sidebar_open() then
+        Require.avante_diff.choose('ours')
+    else
+        vim.cmd('normal! x')
+    end
+end, default_opts)
+vim.keymap.set('v', 'y', function()
+    if sidebar_open() then
+        Require.avante_diff.choose('theirs')
+    else
+        vim.cmd('normal! y')
+    end
+end, default_opts)
+vim.keymap.set('v', 'Y', function()
+    if sidebar_open() then
+        Require.avante_diff.choose('all_theirs')
+    else
+        vim.cmd('normal! Y')
+    end
+end, default_opts)
 vim.keymap.set('n', '<leader>aa', '', default_opts)
 vim.keymap.set('n', '<leader>at', '', default_opts)
 vim.keymap.set('n', '<leader>ar', '', default_opts)
