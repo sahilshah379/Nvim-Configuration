@@ -181,6 +181,7 @@ Require.lsp_zero.set_server_config({
 })
 
 Require.copilot.setup({
+    auto_attach = true,
     suggestion = { enabled = false },
     panel = { enabled = false },
 })
@@ -255,74 +256,15 @@ Require.avante.setup({
     provider = 'openai',
     auto_suggestions_provider = nil,
     cursor_applying_provider = nil,
-    openai = {
-        endpoint = 'https://api.openai.com/v1',
-        model = 'o3-mini',
-        timeout = 30000,
-        temperature = 0,
-        max_completion_tokens = 16384,
-    },
-    reasoning_effort='medium',
-    dual_boost = {
-        enabled = false,
-    },
-    behaviour = {
-        auto_suggestions = false,
-        auto_set_highlight_group = true,
-        auto_set_keymaps = true,
-        auto_apply_diff_after_generation = false,
-        support_paste_from_clipboard = true,
-        minimize_diff = true,
-        enable_token_counting = true,
-        enable_cursor_planning_mode = false,
-        enable_claude_text_editor_tool_mode = false,
-    },
-    hints = { enabled = false },
-    windows = {
-        position = 'right',
-        wrap = true,
-        width = 30,
-        sidebar_header = {
-            enabled = true,
-            align = 'center',
-            rounded = true,
-        },
-        input = {
-            prefix = '> ',
-            height = 8,
-        },
-        edit = {
-            border = 'rounded',
-            start_insert = true,
-        },
-        ask = {
-            floating = false,
-            start_insert = false,
-            border = 'rounded',
-            focus_on_apply = 'ours',
+    providers = {
+        openai = {
+            endpoint = 'https://api.openai.com/v1',
+            model = 'gpt-4o',
+            extra_request_body = {
+                temperature = 0.5,
+                max_completion_tokens = 16384,
+            },
         },
     },
-    highlights = {
-        diff = {
-            current = 'DiffText',
-            incoming = 'DiffAdd',
-        },
-    },
-    avante = {
-        background = 'Normal',
-        border = 'FloatBorder',
-        text = 'Normal',
-        prompt = 'Normal',
-        hint = 'Comment',
-    },
-    diff = {
-        autojump = true,
-        list_opener = 'copen',
-        override_timeoutlen = 500,
-    },
-    suggestion = {
-        debounce = 600,
-        throttle = 600,
-    }
 })
 
