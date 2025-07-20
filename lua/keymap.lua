@@ -2,7 +2,6 @@
 
 -- [[ Local Variables ]]
 local default_opts = { noremap = true, silent = true }
-local lsp_opts = { buffer = bufnr }
 
 -- [[ General ]]
 vim.keymap.set('n', '<ESC>', function()
@@ -15,23 +14,22 @@ vim.keymap.set('n', '<C-u>', '<C-u>zz', default_opts)
 vim.keymap.set('n', '<C-d>', '<C-d>zz', default_opts)
 vim.keymap.set('n', '<C-f>', '<C-f>zz', default_opts)
 vim.keymap.set('n', '<C-b>', '<C-b>zz', default_opts)
-vim.keymap.set('n', 'gg', 'gg0', default_opts)
-vim.keymap.set('n', 'G', 'G$', default_opts)
-vim.keymap.set('v', 'gg', 'gg0', default_opts)
-vim.keymap.set('v', 'G', 'G$', default_opts)
+vim.keymap.set({'n', 'x'}, 'gg', 'gg0', default_opts)
+vim.keymap.set({'n', 'x'}, 'G', 'G$', default_opts)
 
 -- [[ Text Manipulation ]]
 vim.keymap.set('n', '<M-k>', ':m .-2<CR>==', default_opts)
-vim.keymap.set('v', '<M-k>', ':m \'<-2<CR>gv=gv', default_opts)
+vim.keymap.set('x', '<M-k>', ':m \'<-2<CR>gv=gv', default_opts)
 vim.keymap.set('n', '<M-j>', ':m .+1<CR>==', default_opts)
-vim.keymap.set('v', '<M-j>', ':m \'>+1<CR>gv=gv', default_opts)
-vim.keymap.set('v', '<', '<gv', default_opts)
-vim.keymap.set('v', '>', '>gv', default_opts)
+vim.keymap.set('x', '<M-j>', ':m \'>+1<CR>gv=gv', default_opts)
+vim.keymap.set('x', '<', '<gv', default_opts)
+vim.keymap.set('x', '>', '>gv', default_opts)
 vim.keymap.set('i', '<S-Tab>', '<C-d>', default_opts)
 
 -- [[ Clipboard ]]
 vim.keymap.set('n', '<leader>y', '"+y', default_opts)
-vim.keymap.set('v', '<leader>y', '"+y', default_opts)
+vim.keymap.set('x', '<leader>y', '"+y', default_opts)
+vim.keymap.set('x', 'p', '"_dP', default_opts)
 
 -- [[ Windows ]]
 vim.keymap.set('n', '<C-h>', function() vim.cmd('TmuxNavigateLeft') end, default_opts)
@@ -47,12 +45,12 @@ vim.keymap.set('n', '<M-Right>', function() vim.cmd('vertical resize +2') end, d
 vim.keymap.set('n', '<leader>w', function() vim.cmd('wa') end, default_opts)
 vim.keymap.set('n', '<leader>q', function() vim.cmd('qa') end, default_opts)
 vim.keymap.set('n', '<leader>e', function() vim.cmd('e!') end, default_opts)
+vim.keymap.set('n', '<leader>h', vim.diagnostic.open_float)
 
 -- [[ Telescope ]]
 vim.keymap.set('n', '<leader>f', Require.telescope_builtin.find_files, default_opts)
 vim.keymap.set('n', '<leader>g', function() Require.telescope.extensions.live_grep_args.live_grep_args() end, default_opts)
 vim.keymap.set('n', '<leader>d', function() Require.telescope.extensions.file_browser.file_browser() end, default_opts)
-vim.keymap.set('n', '<leader>h', Require.telescope_builtin.help_tags, default_opts)
 Require.telescope.setup({
     defaults = {
         mappings = {
@@ -185,16 +183,14 @@ vim.keymap.set('n', '<leader>6', function() Require.harpoon:list():select(6) end
 vim.keymap.set('n', '<leader>7', function() Require.harpoon:list():select(7) end)
 vim.keymap.set('n', '<leader>8', function() Require.harpoon:list():select(8) end)
 vim.keymap.set('n', '<leader>9', function() Require.harpoon:list():select(9) end)
-vim.keymap.set('n', '<C-n>', function() Require.harpoon:list():prev() end)
-vim.keymap.set('n', '<C-m>', function() Require.harpoon:list():next() end)
 
 -- [[ LSP ]]
 Require.lsp_zero.on_attach(function(client, bufnr)
-    vim.keymap.set('n', 'K', function() vim.lsp.buf.hover() end, lsp_opts)
-    vim.keymap.set('n', 'gd', function() vim.lsp.buf.definition() end, lsp_opts)
-    vim.keymap.set('n', 'gD', function() vim.lsp.buf.declaration() end, lsp_opts)
-    vim.keymap.set('n', 'gr', function() vim.lsp.buf.references() end, lsp_opts)
-    vim.keymap.set('n', '<leader>r', function() vim.lsp.buf.rename() end, lsp_opts)
+    local lsp_opts = { buffer = bufnr }
+    vim.keymap.set({'n', 'x'}, 'K', function() vim.lsp.buf.hover() end, lsp_opts)
+    vim.keymap.set({'n', 'x'}, 'gd', Require.telescope_builtin.lsp_definitions, lsp_opts)
+    vim.keymap.set({'n', 'x'}, 'gr', Require.telescope_builtin.lsp_references, lsp_opts)
+    vim.keymap.set({'n', 'x'}, '<leader>r', function() vim.lsp.buf.rename() end, lsp_opts)
 end)
 
 -- [[ Tab Completion ]]

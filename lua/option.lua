@@ -6,12 +6,12 @@ vim.g.loaded_netrwPlugin = 1
 vim.g.loaded_perl_provider = 0
 vim.opt.updatetime = 300
 vim.opt.swapfile = false
-vim.opt.mouse = nil
+vim.opt.mouse = 'a'
 
 -- [[ Screen ]]
 vim.opt.colorcolumn = '80'
 vim.opt.number = true
-vim.opt.relativenumber = true
+vim.opt.relativenumber = false
 vim.opt.scrolloff = 2
 vim.opt.signcolumn = 'no'
 vim.opt.wrap = true
@@ -30,7 +30,6 @@ vim.g.clipboard = {
   copy = {['+'] = copy, ['*'] = copy},
   paste = {['+'] = paste, ['*'] = paste},
 }
-
 
 -- [[ Diagnostics ]]
 vim.diagnostic.config({
