@@ -11,7 +11,7 @@ vim.opt.mouse = 'a'
 -- [[ Screen ]]
 vim.opt.colorcolumn = '80'
 vim.opt.number = true
-vim.opt.relativenumber = false
+vim.opt.relativenumber = true
 vim.opt.scrolloff = 2
 vim.opt.signcolumn = 'no'
 vim.opt.wrap = true

@@ -25,7 +25,7 @@ vim.keymap.set('x', '<M-j>', ':m \'>+1<CR>gv=gv', default_opts)
 vim.keymap.set('x', '<', '<gv', default_opts)
 vim.keymap.set('x', '>', '>gv', default_opts)
 vim.keymap.set('i', '<S-Tab>', '<C-d>', default_opts)
-vim.keymap.set("n", "<leader>j", [[:%!jq .<CR>]], default_opts)
+vim.keymap.set("n", "<leader>j", function() if vim.bo.filetype == "json" then vim.cmd("%!jq .") end end, { desc = "Format JSON with jq" })
 
 -- [[ Clipboard ]]
 vim.keymap.set('n', '<leader>y', '"+y', default_opts)
@@ -47,6 +47,7 @@ vim.keymap.set('n', '<leader>w', function() vim.cmd('wa') end, default_opts)
 vim.keymap.set('n', '<leader>q', function() vim.cmd('qa') end, default_opts)
 vim.keymap.set('n', '<leader>e', function() vim.cmd('e!') end, default_opts)
 vim.keymap.set('n', '<leader>h', vim.diagnostic.open_float)
+vim.keymap.set("n", "<leader>l", function() local is_relative = vim.wo.relativenumber vim.wo.relativenumber = not is_relative end, default_opts)
 
 -- [[ Telescope ]]
 vim.keymap.set('n', '<leader>f', Require.telescope_builtin.find_files, default_opts)
