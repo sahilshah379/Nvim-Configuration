@@ -25,7 +25,7 @@ vim.keymap.set('x', '<M-j>', ':m \'>+1<CR>gv=gv', default_opts)
 vim.keymap.set('x', '<', '<gv', default_opts)
 vim.keymap.set('x', '>', '>gv', default_opts)
 vim.keymap.set('i', '<S-Tab>', '<C-d>', default_opts)
-vim.keymap.set("n", "<leader>j", function() if vim.bo.filetype == "json" then vim.cmd("%!jq .") end end, { desc = "Format JSON with jq" })
+vim.keymap.set("n", "<leader>j", function() if vim.bo.filetype == "json" or vim.bo.filetype == "jsonl" then vim.cmd("%!jq .") end end, { desc = "Format JSON/JSONL with jq" })
 
 -- [[ Clipboard ]]
 vim.keymap.set('n', '<leader>y', '"+y', default_opts)
