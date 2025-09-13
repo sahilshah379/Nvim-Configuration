@@ -7,6 +7,7 @@ vim.g.loaded_perl_provider = 0
 vim.opt.updatetime = 300
 vim.opt.swapfile = false
 vim.opt.mouse = 'a'
+vim.o.autoread = false
 
 -- [[ Screen ]]
 vim.opt.colorcolumn = '80'
