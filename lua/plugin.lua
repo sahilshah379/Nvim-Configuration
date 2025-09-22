@@ -10,7 +10,7 @@ Plug('nvim-treesitter/nvim-treesitter', { ['do'] = 'TSUpdate' })     -- highligh
 Plug('nvim-lua/plenary.nvim')                                        -- dependency
 Plug('MunifTanjim/nui.nvim')                                         -- UI dependency
 Plug('stevearc/dressing.nvim')                                       -- UI dependency
-Plug('nvim-tree/nvim-web-devicons')                                  -- Icons
+Plug('nvim-tree/nvim-web-devicons')                                  -- icons
 Plug('nvim-telescope/telescope.nvim', { ['branch'] = '0.1.x' })      -- fuzzy finder
 Plug('nvim-telescope/telescope-live-grep-args.nvim')                 -- telescope grep
 Plug('nvim-telescope/telescope-file-browser.nvim')                   -- telescope directory
@@ -32,6 +32,7 @@ Plug('hrsh7th/cmp-nvim-lsp')                                         -- cmp from
 Plug('hrsh7th/cmp-buffer')                                           -- cmp from buffer
 Plug('hrsh7th/cmp-path')                                             -- cmp from path
 Plug('hrsh7th/cmp-cmdline')                                          -- cmp from cmd
+Plug('windwp/nvim-autopairs')                                        -- autopairs
 Plug('MeanderingProgrammer/render-markdown.nvim')                    -- markdown render
 Plug('yetone/avante.nvim', { ['branch'] = 'main', ['do'] = 'make' }) -- avante
 
@@ -58,6 +59,8 @@ Require.cmp = require('cmp')
 Require.lspkind = require('lspkind')
 Require.copilot_cmp = require('copilot_cmp')
 Require.copilot_cmp_comparators = require('copilot_cmp.comparators')
+Require.autopairs = require('nvim-autopairs')
+Require.autopairs_cmp = require('nvim-autopairs.completion.cmp')
 Require.render_markdown = require('render-markdown')
 Require.avante = require('avante')
 Require.avante_api = require('avante.api')
@@ -85,7 +88,7 @@ Require.lualine.setup({
 
 Require.treesitter.setup({
     ensure_installed = {
-        'bash', 'c', 'comment', 'cpp', 'java', 'javascript', 'lua', 'markdown', 'markdown_inline', 'python', 'tmux', 'yaml'
+        'bash', 'c', 'comment', 'cpp', 'r', 'java', 'javascript', 'lua', 'markdown', 'markdown_inline', 'python', 'tmux', 'yaml'
     },
     sync_install = false,
     auto_install = true,
@@ -167,7 +170,7 @@ Require.osc52.setup({
 Require.mason.setup()
 Require.mason_lspconfig.setup({
     ensure_installed = {
-        'bashls', 'clangd', 'lua_ls', 'pyright'
+        'bashls', 'clangd', 'jdtls', 'lua_ls', 'matlab_ls', 'r_language_server', 'pyright'
     },
     handlers = {
         Require.lsp_zero.default_setup,
@@ -227,6 +230,7 @@ Require.cmp.setup({
         documentation = Require.cmp.config.window.bordered()
     }
 })
+
 Require.cmp.setup.cmdline({ '/', '?' }, {
     mapping = Require.cmp.mapping.preset.cmdline(),
     sources = {
@@ -244,6 +248,14 @@ Require.cmp.setup.cmdline(':', {
 })
 
 Require.copilot_cmp.setup()
+
+Require.autopairs.setup()
+Require.cmp.event:on(
+    'confirm_done',
+    Require.autopairs_cmp.on_confirm_done({
+        filetypes = { markdown = false, text = false, ['*'] = {} }
+    })
+)
 
 Require.render_markdown.setup({
     file_types = {
