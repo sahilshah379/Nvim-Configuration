@@ -170,7 +170,7 @@ Require.osc52.setup({
 Require.mason.setup()
 Require.mason_lspconfig.setup({
     ensure_installed = {
-        'bashls', 'clangd', 'jdtls', 'lua_ls', 'matlab_ls', 'r_language_server', 'pyright'
+        'bashls', 'clangd', 'lua_ls', 'pyright'
     },
     handlers = {
         Require.lsp_zero.default_setup,
