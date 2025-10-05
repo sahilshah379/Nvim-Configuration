@@ -61,6 +61,17 @@ echo "alias cat='bat'" >> ~/.bashrc
 source ~/.bashrc
 ```
 
+### Gemini
+
+```bash
+npm install -g @google/gemini-cli
+```
+
+To login, run:
+```bash
+gemini
+```
+
 ---
 
 ## 3. Set Up Neovim Configuration
@@ -101,4 +112,4 @@ source ~/.bashrc
   ```
 
 * Refer to the full list of supported languages here:
-  [nvim-treesitter Supported Languages](https://github.com/nvim-treesitter/nvim-treesitter?tab=readme-ov-file#supported-languages)
+  [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter?tab=readme-ov-file#supported-languages)
