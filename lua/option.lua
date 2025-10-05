@@ -64,3 +64,4 @@ vim.opt.tabstop = 4
 -- [[ Splits ]]
 vim.opt.splitbelow = true
 vim.opt.splitright = true
+

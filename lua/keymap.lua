@@ -174,7 +174,7 @@ vim.keymap.set('n', 's', function()
 end)
 
 -- [[ Harpoon ]]
-vim.keymap.set('n', '<leader>s', function() Require.harpoon:list():add() end)
+vim.keymap.set('n', '<leader>a', function() Require.harpoon:list():add() end)
 vim.keymap.set('n', '<leader>m', function() Require.harpoon.ui:toggle_quick_menu(Require.harpoon:list()) end)
 vim.keymap.set('n', '<leader>1', function() Require.harpoon:list():select(1) end)
 vim.keymap.set('n', '<leader>2', function() Require.harpoon:list():select(2) end)
@@ -230,5 +230,62 @@ Require.cmp.setup({
             end
         end,
     }),
+})
+
+-- [[ Terminal ]]
+local Terminal = {
+    window = nil, bufnr = nil, job_id = nil,
+    close = function(self)
+        if self.window and vim.api.nvim_win_is_valid(self.window) then
+            vim.api.nvim_win_close(self.window, true)
+            vim.cmd("stopinsert!")
+        end
+    end,
+    spawn = function(self)
+        self.job_id = vim.fn.termopen(vim.o.shell, { detach = 1, on_exit = function()
+            self:close()
+            if self.bufnr and vim.api.nvim_buf_is_loaded(self.bufnr) then
+                vim.api.nvim_buf_delete(self.bufnr, { force = true })
+            end
+            self.window, self.bufnr, self.job_id = nil, nil, nil
+        end })
+        vim.api.nvim_buf_set_keymap(self.bufnr, 't', '<C-h>', '<C-h>', default_opts)
+        vim.api.nvim_buf_set_keymap(self.bufnr, 't', '<C-j>', '<C-j>', default_opts)
+        vim.api.nvim_buf_set_keymap(self.bufnr, 't', '<C-k>', '<C-k>', default_opts)
+        vim.api.nvim_buf_set_keymap(self.bufnr, 't', '<C-l>', '<C-l>', default_opts)
+        vim.api.nvim_buf_set_keymap(self.bufnr, 't', '<M-j>', '', default_opts)
+        vim.api.nvim_buf_set_keymap(self.bufnr, 't', '<M-k>', '', default_opts)
+    end,
+    open = function(self)
+        local should_spawn = not self.bufnr or not vim.api.nvim_buf_is_valid(self.bufnr)
+        if should_spawn then self.bufnr = vim.api.nvim_create_buf(false, false) end
+
+        local width, height = math.ceil(vim.o.columns * 0.8), math.ceil(vim.o.lines * 0.8)
+        self.window = vim.api.nvim_open_win(self.bufnr, true, {
+            relative = "editor", style = "minimal", border = "single", width = width, height = height,
+            row = math.ceil((vim.o.lines - height) / 2), col = math.ceil((vim.o.columns - width) / 2)
+        })
+        if should_spawn then self:spawn() end
+        vim.api.nvim_set_current_win(self.window)
+        vim.cmd("startinsert")
+        vim.api.nvim_create_autocmd("WinLeave", { buffer = self.bufnr, callback = function() self:close() end })
+    end,
+    toggle = function(self)
+        if self.window and vim.api.nvim_win_is_valid(self.window) then self:close() else self:open() end
+    end
+}
+vim.keymap.set({ 'n', 't' }, '`', function() Terminal:toggle() end, { silent = true, noremap = true })
+vim.api.nvim_create_autocmd('UIEnter', {
+    pattern = '*',
+    callback = function()
+        vim.schedule(function()
+            Terminal:toggle()
+            vim.fn.chansend(Terminal.job_id, "gemini\n")
+            Terminal:toggle()
+            vim.defer_fn(function()
+                vim.fn.chansend(Terminal.job_id, vim.api.nvim_replace_termcodes("<C-l>", true, false, true))
+            end, 15000)
+        end)
+    end,
 })
 

@@ -34,7 +34,6 @@ Plug('hrsh7th/cmp-path')                                             -- cmp from
 Plug('hrsh7th/cmp-cmdline')                                          -- cmp from cmd
 Plug('windwp/nvim-autopairs')                                        -- autopairs
 Plug('MeanderingProgrammer/render-markdown.nvim')                    -- markdown render
-Plug('yetone/avante.nvim', { ['branch'] = 'main', ['do'] = 'make' }) -- avante
 
 vim.call('plug#end')
 
@@ -62,15 +61,6 @@ Require.copilot_cmp_comparators = require('copilot_cmp.comparators')
 Require.autopairs = require('nvim-autopairs')
 Require.autopairs_cmp = require('nvim-autopairs.completion.cmp')
 Require.render_markdown = require('render-markdown')
-Require.avante = require('avante')
-Require.avante_api = require('avante.api')
-Require.avante_config = require('avante.config')
-Require.avante_diff = require('avante.diff')
-
-Require.catppuccin.setup({
-    flavour = 'mocha',
-})
-vim.cmd('colorscheme catppuccin')
 
 Require.lualine.setup({
     options = {
@@ -260,23 +250,6 @@ Require.cmp.event:on(
 Require.render_markdown.setup({
     file_types = {
         'markdown',
-        'Avante',
-    },
-})
-
-Require.avante.setup({
-    provider = 'openai',
-    auto_suggestions_provider = nil,
-    cursor_applying_provider = nil,
-    providers = {
-        openai = {
-            endpoint = 'https://api.openai.com/v1',
-            model = 'gpt-4o',
-            extra_request_body = {
-                temperature = 0.5,
-                max_completion_tokens = 16384,
-            },
-        },
     },
 })
 
