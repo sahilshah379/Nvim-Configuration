@@ -84,32 +84,3 @@ gemini
   mv Nvim-Configuration/ nvim/
   ```
 
----
-
-## 4. Install Plugins
-
-* Install `vim-plug`:
-
-  ```bash
-  sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
-  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  ```
-
-* Open Neovim and run:
-
-  ```vim
-  :PlugInstall
-  ```
-
----
-
-## 5. Install Language Parsers
-
-* Use Tree-sitter to install language parsers:
-
-  ```vim
-  :TSInstall <language>
-  ```
-
-* Refer to the full list of supported languages here:
-  [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter?tab=readme-ov-file#supported-languages)

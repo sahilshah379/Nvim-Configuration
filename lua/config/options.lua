@@ -3,11 +3,12 @@
 -- [[ Context ]]
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+vim.g.loaded_matchit = 1
 vim.g.loaded_perl_provider = 0
 vim.opt.updatetime = 300
 vim.opt.swapfile = false
 vim.opt.mouse = 'a'
-vim.o.autoread = false
+vim.o.autoread = true
 
 -- [[ Screen ]]
 vim.opt.colorcolumn = '80'
@@ -16,21 +17,9 @@ vim.opt.relativenumber = true
 vim.opt.scrolloff = 2
 vim.opt.signcolumn = 'no'
 vim.opt.wrap = true
+vim.opt.winborder = 'rounded'
 vim.g.tmux_navigator_no_wrap = 1
 vim.cmd('highlight ColorColumn ctermbg=lightgrey guibg=lightgrey')
-
--- [[ Clipboard ]]
-local function copy(lines, _)
-  Require.osc52.copy(table.concat(lines, '\n'))
-end
-local function paste()
-  return {vim.fn.split(vim.fn.getreg(''), '\n'), vim.fn.getregtype('')}
-end
-vim.g.clipboard = {
-  name = 'osc52',
-  copy = {['+'] = copy, ['*'] = copy},
-  paste = {['+'] = paste, ['*'] = paste},
-}
 
 -- [[ Diagnostics ]]
 vim.diagnostic.config({
@@ -42,12 +31,6 @@ vim.diagnostic.config({
 -- [[ Filetypes ]]
 vim.opt.encoding = 'utf8'
 vim.opt.fileencoding = 'utf8'
-
--- [[ Theme ]]
-vim.opt.termguicolors = true
-vim.cmd.colorscheme 'catppuccin'
-vim.api.nvim_set_hl(0, 'CmpItemKindCopilot', {fg ='#6CC644'})
-
 
 -- [[ Search ]]
 vim.opt.ignorecase = true

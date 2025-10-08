@@ -2,9 +2,10 @@
 
 -- [[ Initialization ]]
 vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
 
 -- [[ Imports ]]
-require('plugin')
-require('option')
-require('keymap')
+require('config.options')
+require('config.keymap')
+require('config.lazy')
 
