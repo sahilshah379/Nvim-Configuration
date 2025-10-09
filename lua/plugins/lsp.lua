@@ -24,7 +24,6 @@ return {
             end
             cmp.setup({
                 mapping = cmp.mapping.preset.insert({
-                    ['<CR>'] = cmp.mapping.confirm({ select = true }),
                     ['<C-Space>'] = cmp.mapping.confirm {
                         behavior = cmp.ConfirmBehavior.Insert,
                         select = true
@@ -101,24 +100,27 @@ return {
             'nvim-telescope/telescope.nvim'
         },
         config = function()
+            local telescope_builtin = require('telescope.builtin')
             local on_attach = function(client, bufnr)
                 local opts = { buffer = bufnr, remap = false, silent = true }
                 vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
                 vim.keymap.set('n', '<leader>r', vim.lsp.buf.rename, opts)
-                vim.keymap.set('n', 'gd', function() require('telescope.builtin').lsp_definitions({ reuse_win = true }) end, opts)
-                vim.keymap.set('n', 'gr', function() require('telescope.builtin').lsp_references({ reuse_win = true }) end, opts)
-                vim.keymap.set('n', 'gI', function() require('telescope.builtin').lsp_implementations({ reuse_win = true }) end, opts)
-                vim.keymap.set('n', 'gy', function() require('telescope.builtin').lsp_type_definitions({ reuse_win = true }) end, opts)
+                vim.keymap.set('n', '<leader>h', vim.diagnostic.open_float, opts)
+                vim.keymap.set('n', 'gd', telescope_builtin.lsp_definitions, opts)
+                vim.keymap.set('n', 'gr', telescope_builtin.lsp_references, opts)
             end
-            local capabilities = require('cmp_nvim_lsp').default_capabilities()
-            local mason_lspconfig = require('mason-lspconfig')
-            mason_lspconfig.setup({
+            vim.api.nvim_create_autocmd('LspAttach', {
+                group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+                callback = function(ev)
+                    on_attach(vim.lsp.get_client_by_id(ev.data.client_id), ev.buf)
+                end,
+            })
+            require('mason-lspconfig').setup({
                 ensure_installed = { 'bashls', 'clangd', 'lua_ls', 'pyright' },
                 handlers = {
                     function(server_name)
-                        vim.lsp.config(server_name, {
-                            on_attach = on_attach,
-                            capabilities = capabilities
+                        require('lspconfig')[server_name].setup({
+                            capabilities = require('cmp_nvim_lsp').default_capabilities()
                         })
                     end
                 }

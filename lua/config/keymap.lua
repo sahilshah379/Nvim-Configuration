@@ -21,7 +21,12 @@ vim.keymap.set('x', '<M-j>', ':m \'>+1<CR>gv=gv', opts)
 vim.keymap.set('x', '<', '<gv', opts)
 vim.keymap.set('x', '>', '>gv', opts)
 vim.keymap.set('i', '<S-Tab>', '<C-d>', opts)
-vim.keymap.set("n", "<leader>j", function() if vim.bo.filetype == "json" or vim.bo.filetype == "jsonl" then vim.cmd("%!jq .") end end, opts)
+vim.keymap.set("n", "<leader>j", function()
+    if vim.bo.filetype == "json" or vim.bo.filetype == "jsonl" then
+        vim.cmd("%!jq .")
+        vim.cmd("set syntax=json")
+    end
+end, opts)
 
 -- [[ Clipboard ]]
 vim.keymap.set({ 'n', 'x' }, '<leader>y', '"+y', opts)
@@ -37,7 +42,6 @@ vim.keymap.set('n', '<M-Right>', function() vim.cmd('vertical resize +2') end, o
 vim.keymap.set('n', '<leader>w', '<cmd>wa<cr>', opts)
 vim.keymap.set('n', '<leader>q', '<cmd>qa<cr>', opts)
 vim.keymap.set('n', '<leader>e', '<cmd>e!<cr>', opts)
-vim.keymap.set('n', '<leader>h', vim.diagnostic.open_float, opts)
 vim.keymap.set("n", "<leader>l", function() vim.wo.relativenumber = not vim.wo.relativenumber end, opts)
 
 -- [[ Terminal ]]
@@ -88,10 +92,10 @@ vim.api.nvim_create_autocmd('UIEnter', {
     callback = function()
         vim.schedule(function()
             Terminal:toggle()
-            vim.fn.chansend(Terminal.job_id, "gemini\n")
+            vim.fn.chansend(Terminal.job_id, 'gemini\n')
             Terminal:toggle()
             vim.defer_fn(function()
-                vim.fn.chansend(Terminal.job_id, vim.api.nvim_replace_termcodes("<C-l>", true, false, true))
+                vim.fn.chansend(Terminal.job_id, vim.api.nvim_replace_termcodes('<C-l>', true, false, true))
             end, 15000)
         end)
     end,
