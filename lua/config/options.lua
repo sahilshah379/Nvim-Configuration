@@ -21,6 +21,9 @@ vim.opt.winborder = 'rounded'
 vim.g.tmux_navigator_no_wrap = 1
 vim.cmd('highlight ColorColumn ctermbg=lightgrey guibg=lightgrey')
 
+-- [[ Clipboard ]]
+vim.g.clipboard = 'osc52'
+
 -- [[ Diagnostics ]]
 vim.diagnostic.config({
     virtual_text = false,
