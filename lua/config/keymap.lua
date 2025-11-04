@@ -21,10 +21,10 @@ vim.keymap.set('x', '<M-j>', ':m \'>+1<CR>gv=gv', opts)
 vim.keymap.set('x', '<', '<gv', opts)
 vim.keymap.set('x', '>', '>gv', opts)
 vim.keymap.set('i', '<S-Tab>', '<C-d>', opts)
-vim.keymap.set("n", "<leader>j", function()
-    if vim.bo.filetype == "json" or vim.bo.filetype == "jsonl" then
-        vim.cmd("%!jq .")
-        vim.cmd("set syntax=json")
+vim.keymap.set('n', '<leader>j', function()
+    if vim.bo.filetype == 'json' or vim.bo.filetype == 'jsonl' then
+        vim.cmd('%!jq .')
+        vim.cmd('set syntax=json')
     end
 end, opts)
 
@@ -42,25 +42,44 @@ vim.keymap.set('n', '<M-Right>', function() vim.cmd('vertical resize +2') end, o
 vim.keymap.set('n', '<leader>w', '<cmd>wa<cr>', opts)
 vim.keymap.set('n', '<leader>q', '<cmd>qa<cr>', opts)
 vim.keymap.set('n', '<leader>e', '<cmd>e!<cr>', opts)
-vim.keymap.set("n", "<leader>l", function() vim.wo.relativenumber = not vim.wo.relativenumber end, opts)
+vim.keymap.set('n', '<leader>l', function() vim.wo.relativenumber = not vim.wo.relativenumber end, opts)
 
 -- [[ Terminal ]]
 local Terminal = {
     window = nil, bufnr = nil, job_id = nil,
+    waiting_for_gemini = false,
     close = function(self)
         if self.window and vim.api.nvim_win_is_valid(self.window) then
             vim.api.nvim_win_close(self.window, true)
-            vim.cmd("stopinsert!")
+            vim.cmd('stopinsert!')
         end
     end,
     spawn = function(self)
-        self.job_id = vim.fn.termopen(vim.o.shell, { detach = 1, on_exit = function()
-            self:close()
-            if self.bufnr and vim.api.nvim_buf_is_loaded(self.bufnr) then
-                vim.api.nvim_buf_delete(self.bufnr, { force = true })
+        local function on_stdout_handler(job_id, data, event)
+            if not self.is_waiting_for_gemini then return end
+            local is_ready = false
+            for _, line in ipairs(data) do
+                if string.find(line, 'Type your message') then
+                    is_ready = true
+                    break
+                end
             end
-            self.window, self.bufnr, self.job_id = nil, nil, nil
-        end })
+            if is_ready then
+		vim.defer_fn(function() vim.fn.chansend(self.job_id, vim.api.nvim_replace_termcodes('<C-l>', true, false, true)) end, 100)
+                self.is_waiting_for_gemini = false
+            end
+        end
+        self.job_id = vim.fn.termopen(vim.o.shell, {
+            detach = 1,
+            on_exit = function()
+                self:close()
+                if self.bufnr and vim.api.nvim_buf_is_loaded(self.bufnr) then
+                    vim.api.nvim_buf_delete(self.bufnr, { force = true })
+                end
+                self.window, self.bufnr, self.job_id = nil, nil, nil
+            end,
+            on_stdout = on_stdout_handler,
+        })
         vim.api.nvim_buf_set_keymap(self.bufnr, 't', '<C-h>', '<C-h>', opts)
         vim.api.nvim_buf_set_keymap(self.bufnr, 't', '<C-j>', '<C-j>', opts)
         vim.api.nvim_buf_set_keymap(self.bufnr, 't', '<C-k>', '<C-k>', opts)
@@ -74,13 +93,13 @@ local Terminal = {
 
         local width, height = math.ceil(vim.o.columns * 0.8), math.ceil(vim.o.lines * 0.8)
         self.window = vim.api.nvim_open_win(self.bufnr, true, {
-            relative = "editor", style = "minimal", border = "rounded", width = width, height = height,
+            relative = 'editor', style = 'minimal', border = 'rounded', width = width, height = height,
             row = math.ceil((vim.o.lines - height) / 2), col = math.ceil((vim.o.columns - width) / 2)
         })
         if should_spawn then self:spawn() end
         vim.api.nvim_set_current_win(self.window)
-        vim.cmd("startinsert")
-        vim.api.nvim_create_autocmd("WinLeave", { buffer = self.bufnr, callback = function() self:close() end })
+        vim.cmd('startinsert')
+        vim.api.nvim_create_autocmd('WinLeave', { buffer = self.bufnr, callback = function() self:close() end })
     end,
     toggle = function(self)
         if self.window and vim.api.nvim_win_is_valid(self.window) then self:close() else self:open() end
@@ -92,11 +111,10 @@ vim.api.nvim_create_autocmd('UIEnter', {
     callback = function()
         vim.schedule(function()
             Terminal:toggle()
+            vim.fn.chansend(Terminal.job_id, 'conda activate dev\n')
             vim.fn.chansend(Terminal.job_id, 'gemini\n')
+            Terminal.is_waiting_for_gemini = true
             Terminal:toggle()
-            vim.defer_fn(function()
-                vim.fn.chansend(Terminal.job_id, vim.api.nvim_replace_termcodes('<C-l>', true, false, true))
-            end, 15000)
         end)
     end,
 })
