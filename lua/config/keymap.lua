@@ -111,7 +111,7 @@ vim.api.nvim_create_autocmd('UIEnter', {
     callback = function()
         vim.schedule(function()
             Terminal:toggle()
-            vim.fn.chansend(Terminal.job_id, 'conda activate dev\n')
+            vim.fn.chansend(Terminal.job_id, 'if type conda | grep -q "function" && [ -d "$(conda info --base)/envs/dev" ]; then conda activate dev; fi\n')
             vim.fn.chansend(Terminal.job_id, 'gemini\n')
             Terminal.is_waiting_for_gemini = true
             Terminal:toggle()
