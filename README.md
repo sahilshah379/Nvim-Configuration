@@ -61,15 +61,15 @@ echo "alias cat='bat'" >> ~/.bashrc
 source ~/.bashrc
 ```
 
-### Gemini
+### Claude
 
 ```bash
-npm install -g @google/gemini-cli
+curl -fsSL https://claude.ai/install.sh | bash
 ```
 
 To login, run:
 ```bash
-gemini
+claude
 ```
 
 ---

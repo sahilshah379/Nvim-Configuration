@@ -47,7 +47,6 @@ vim.keymap.set('n', '<leader>l', function() vim.wo.relativenumber = not vim.wo.r
 -- [[ Terminal ]]
 local Terminal = {
     window = nil, bufnr = nil, job_id = nil,
-    waiting_for_gemini = false,
     close = function(self)
         if self.window and vim.api.nvim_win_is_valid(self.window) then
             vim.api.nvim_win_close(self.window, true)
@@ -55,20 +54,6 @@ local Terminal = {
         end
     end,
     spawn = function(self)
-        local function on_stdout_handler(job_id, data, event)
-            if not self.is_waiting_for_gemini then return end
-            local is_ready = false
-            for _, line in ipairs(data) do
-                if string.find(line, 'Type your message') then
-                    is_ready = true
-                    break
-                end
-            end
-            if is_ready then
-		vim.defer_fn(function() vim.fn.chansend(self.job_id, vim.api.nvim_replace_termcodes('<C-l>', true, false, true)) end, 100)
-                self.is_waiting_for_gemini = false
-            end
-        end
         self.job_id = vim.fn.termopen(vim.o.shell, {
             detach = 1,
             on_exit = function()
@@ -78,7 +63,6 @@ local Terminal = {
                 end
                 self.window, self.bufnr, self.job_id = nil, nil, nil
             end,
-            on_stdout = on_stdout_handler,
         })
         vim.api.nvim_buf_set_keymap(self.bufnr, 't', '<C-h>', '<C-h>', opts)
         vim.api.nvim_buf_set_keymap(self.bufnr, 't', '<C-j>', '<C-j>', opts)
@@ -112,8 +96,7 @@ vim.api.nvim_create_autocmd('UIEnter', {
         vim.schedule(function()
             Terminal:toggle()
             vim.fn.chansend(Terminal.job_id, 'if type conda | grep -q "function" && [ -d "$(conda info --base)/envs/dev" ]; then conda activate dev; fi\n')
-            vim.fn.chansend(Terminal.job_id, 'gemini\n')
-            Terminal.is_waiting_for_gemini = true
+            vim.fn.chansend(Terminal.job_id, 'clear && claude\n')
             Terminal:toggle()
         end)
     end,
