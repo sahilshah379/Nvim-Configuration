@@ -3,9 +3,8 @@
 return {
     {
         'nvim-treesitter/nvim-treesitter',
+        lazy = false,
         build = ':TSUpdate',
-        event = { 'BufReadPost', 'BufNewFile' },
-        cmd = { 'TSUpdate', 'TSInstall', 'TSLog', 'TSUninstall' },
         opts = {
             ensure_installed = {
                 'bash', 'c', 'comment', 'cpp', 'java', 'json', 'lua',
@@ -22,7 +21,7 @@ return {
             }
         },
         config = function(_, opts)
-            require('nvim-treesitter.configs').setup(opts)
+            require('nvim-treesitter').setup(opts)
         end
     }
 }

@@ -16,17 +16,19 @@ return {
         }
     },
     {
-        'ggandor/leap.nvim',
-        config = function()
-            require('leap').create_default_mappings()
-            vim.keymap.set('n', 's', function()
+        url = "https://codeberg.org/andyg/leap.nvim",
+        keys = {
+            { 's',  '<Plug>(leap-forward)',     mode = { 'x', 'o' } },
+            { 'S',  '<Plug>(leap-backward)',    mode = { 'n', 'x', 'o' } },
+            { 'gs', '<Plug>(leap-from-window)', mode = { 'n', 'x', 'o' } },
+            { 's', function()
                 local focusable_windows = vim.tbl_filter(
                     function(win) return vim.api.nvim_win_get_config(win).focusable end,
                     vim.api.nvim_tabpage_list_wins(0)
                 )
                 require('leap').leap({ target_windows = focusable_windows })
-            end)
-        end
+            end, mode = 'n' }
+        }
     },
     {
         'ThePrimeagen/harpoon',
