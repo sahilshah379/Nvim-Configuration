@@ -47,20 +47,6 @@ echo 'eval "$(zoxide init bash)"' >> ~/.bashrc
 source ~/.bashrc
 ```
 
-### bat
-
-```bash
-sudo apt install bat
-```
-
-Add aliases to your `~/.bashrc`:
-
-```bash
-echo "alias bat='batcat --theme=OneHalfDark'" >> ~/.bashrc
-echo "alias cat='bat'" >> ~/.bashrc
-source ~/.bashrc
-```
-
 ### Claude
 
 ```bash

@@ -44,6 +44,7 @@ vim.opt.hlsearch = false
 -- [[ Whitespace ]]
 vim.opt.expandtab = true
 vim.opt.shiftwidth = 4
+vim.opt.foldenable = false
 vim.opt.softtabstop = 4
 vim.opt.tabstop = 4
 

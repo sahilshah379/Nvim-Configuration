@@ -96,7 +96,7 @@ vim.api.nvim_create_autocmd('UIEnter', {
         vim.schedule(function()
             Terminal:toggle()
             vim.fn.chansend(Terminal.job_id, 'if type conda | grep -q "function" && [ -d "$(conda info --base)/envs/dev" ]; then conda activate dev; fi\n')
-            vim.fn.chansend(Terminal.job_id, 'clear && claude\n')
+            vim.fn.chansend(Terminal.job_id, '(clear && claude --continue 2>/dev/null) || (clear && claude)\n')
             Terminal:toggle()
         end)
     end,

@@ -4,8 +4,8 @@ return {
     {
         'numToStr/Comment.nvim',
         opts = {
-            toggler = { line = '<C-_>' },
-            opleader = { line = '<C-_>' },
+            toggler = { line = '<C-/>' },
+            opleader = { line = '<C-/>' },
             mappings = { extra = false },
             post_hook = function(ctx)
                 if ctx.cmotion == require('Comment.utils').cmotion.v or
