@@ -102,3 +102,48 @@ vim.api.nvim_create_autocmd('UIEnter', {
     end,
 })
 
+-- [[ Translation ]]
+vim.keymap.set({ 'n', 'x' }, '<leader>t', function()
+    local mode = vim.fn.mode()
+    local s_row, s_col, e_row, e_col
+
+    if mode == 'v' or mode == 'V' then
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, false, true), 'nx', false)
+        s_row, s_col = unpack(vim.api.nvim_buf_get_mark(0, '<'))
+        e_row, e_col = unpack(vim.api.nvim_buf_get_mark(0, '>'))
+        if mode == 'V' then s_col, e_col = 0, vim.fn.col({ e_row, '$' }) - 2 end
+    else
+        s_row, e_row = vim.fn.line('.'), vim.fn.line('.')
+        local _, sc, ec = unpack(vim.fn.matchstrpos(vim.fn.getline('.'), '\\k*\\%' .. vim.fn.col('.') .. 'c\\k*'))
+        s_col, e_col = sc, ec - 1
+    end
+
+    local lines = vim.api.nvim_buf_get_text(0, s_row - 1, s_col, e_row - 1, e_col + 1, {})
+    if #lines == 0 or (#lines == 1 and lines[1] == '') then return end
+
+    local encode = function(s) return (s:gsub('([^%w])', function(c) return string.format('%%%02X', string.byte(c)) end)) end
+
+    for i, line in ipairs(lines) do
+        if line ~= '' then
+            local url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q=' .. encode(line)
+            vim.fn.jobstart({ 'curl', '-s', '-A', 'Mozilla/5.0', url }, {
+                stdout_buffered = true,
+                on_stdout = function(_, data)
+                    local ok, decoded = pcall(vim.json.decode, table.concat(data, ''))
+                    if not ok or not decoded or not decoded[1] then return end
+                    local translated = ''
+                    for _, seg in ipairs(decoded[1]) do translated = translated .. (seg[1] or '') end
+                    vim.schedule(function()
+                        local row = s_row - 1 + i - 1
+                        if #lines == 1 then
+                            vim.api.nvim_buf_set_text(0, row, s_col, row, e_col + 1, { translated })
+                        else
+                            vim.api.nvim_buf_set_lines(0, row, row + 1, false, { translated })
+                        end
+                    end)
+                end,
+            })
+        end
+    end
+end, opts)
+
