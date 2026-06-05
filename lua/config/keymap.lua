@@ -124,8 +124,9 @@ vim.keymap.set({ 'n', 'x' }, '<leader>t', function()
     local encode = function(s) return (s:gsub('([^%w])', function(c) return string.format('%%%02X', string.byte(c)) end)) end
 
     for i, line in ipairs(lines) do
-        if line ~= '' then
-            local url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q=' .. encode(line)
+        local indent, content = line:match('^(%s*)(.*)$')
+        if content ~= '' then
+            local url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q=' .. encode(content)
             vim.fn.jobstart({ 'curl', '-s', '-A', 'Mozilla/5.0', url }, {
                 stdout_buffered = true,
                 on_stdout = function(_, data)
@@ -133,6 +134,7 @@ vim.keymap.set({ 'n', 'x' }, '<leader>t', function()
                     if not ok or not decoded or not decoded[1] then return end
                     local translated = ''
                     for _, seg in ipairs(decoded[1]) do translated = translated .. (seg[1] or '') end
+                    translated = indent .. translated
                     vim.schedule(function()
                         local row = s_row - 1 + i - 1
                         if #lines == 1 then
